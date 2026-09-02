@@ -1,3 +1,240 @@
+/* PAGES */
+
+.page {
+  max-width: 1190px;
+  margin: auto;
+  padding: 60px 24px 100px;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 45px;
+}
+
+.page-header h1 {
+  font-size: 42px;
+  letter-spacing: -2px;
+}
+
+.menu-search {
+  width: 100%;
+  max-width: 500px;
+  margin-top: 25px;
+  padding: 15px 20px;
+  border: 1px solid #eee;
+  border-radius: 30px;
+  outline: none;
+  font-size: 15px;
+}
+
+.menu-search:focus {
+  border-color: #ff5a36;
+}
+
+/* CART */
+
+.empty-cart {
+  text-align: center;
+}
+
+.empty-cart h1 {
+  margin-bottom: 15px;
+}
+
+.empty-cart p {
+  color: #777;
+  margin-bottom: 30px;
+}
+
+.continue-btn {
+  display: inline-block;
+  background: #ff5a36;
+  color: white;
+  padding: 14px 24px;
+  border-radius: 30px;
+  font-weight: 700;
+}
+
+.cart-layout {
+  display: grid;
+  grid-template-columns: 1.7fr 1fr;
+  gap: 30px;
+}
+
+.cart-items {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.cart-item {
+  background: white;
+  border-radius: 18px;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.05);
+}
+
+.cart-item img {
+  width: 100px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.cart-item-info {
+  flex: 1;
+}
+
+.cart-item-info h3 {
+  margin-bottom: 5px;
+}
+
+.cart-item-info p {
+  color: #888;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.quantity-controls button {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #fff0e9;
+  color: #ff5a36;
+  font-size: 18px;
+}
+
+.remove-btn {
+  background: transparent;
+  color: #e53935;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.order-summary {
+  background: white;
+  padding: 25px;
+  border-radius: 20px;
+  height: fit-content;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.05);
+}
+
+.order-summary h2 {
+  margin-bottom: 25px;
+}
+
+.order-summary > div {
+  display: flex;
+  justify-content: space-between;
+  margin: 16px 0;
+  color: #666;
+}
+
+.order-summary hr {
+  border: none;
+  border-top: 1px solid #eee;
+}
+
+.order-summary .total {
+  color: #202020;
+  font-size: 18px;
+}
+
+.checkout-btn {
+  width: 100%;
+  margin-top: 15px;
+  background: #ff5a36;
+  color: white;
+  padding: 15px;
+  border-radius: 30px;
+  font-weight: 700;
+}
+
+/* LOGIN */
+
+.login-page {
+  display: flex;
+  justify-content: center;
+}
+
+.login-form {
+  width: 100%;
+  max-width: 430px;
+  background: white;
+  padding: 45px;
+  border-radius: 25px;
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+}
+
+.login-icon {
+  font-size: 45px;
+  margin-bottom: 15px;
+}
+
+.login-form h1 {
+  font-size: 28px;
+  margin-bottom: 30px;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 15px;
+  margin-bottom: 15px;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  outline: none;
+}
+
+.login-form input:focus {
+  border-color: #ff5a36;
+}
+
+.login-form button {
+  width: 100%;
+  padding: 15px;
+  background: #ff5a36;
+  color: white;
+  border-radius: 12px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.login-form p:last-child {
+  color: #777;
+  font-size: 13px;
+}
+
+.login-form p:last-child strong {
+  color: #ff5a36;
+}
+
+.no-results {
+  text-align: center;
+  color: #888;
+  padding: 40px;
+}
+
+@media (max-width: 800px) {
+  .cart-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .cart-item {
+    flex-wrap: wrap;
+  }
+}
+
+
 :root {
   font-family: Inter, 'Segoe UI', sans-serif;
   line-height: 1.5;
@@ -16,6 +253,19 @@
   padding: 0;
 }
 
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #fff9f2 0%, #fffdfb 100%);
+}
+
 button,
 input {
   font: inherit;
@@ -23,15 +273,6 @@ input {
 
 button {
   cursor: pointer;
-}
-
-#root {
-  min-height: 100vh;
-}
-
-body {
-  min-height: 100vh;
-  background: linear-gradient(180deg, #fff9f2 0%, #fffdfb 100%);
 }
 
 .app-shell {
