@@ -80,13 +80,31 @@ const fallbackFoods = [
   },
 ]
 
+const restaurants = [
+  { name: 'Olive & Ember', cuisine: 'Italian and wood-fired classics', rating: '4.9', time: '25-35 min', icon: '🍕', accent: 'sage' },
+  { name: 'The Curry Room', cuisine: 'Regional Indian comfort food', rating: '4.8', time: '30-40 min', icon: '🍛', accent: 'saffron' },
+  { name: 'Wok Street', cuisine: 'Modern Chinese and noodles', rating: '4.7', time: '20-30 min', icon: '🍜', accent: 'coral' },
+  { name: 'Green Table', cuisine: 'Bright bowls and fresh salads', rating: '4.6', time: '15-25 min', icon: '🥗', accent: 'mint' },
+]
+
 function App() {
   const [foodItems, setFoodItems] = useState(fallbackFoods)
   const [selectedCategory, setSelectedCategory] = useState('All')
   const [search, setSearch] = useState('')
   const [selectedFood, setSelectedFood] = useState(fallbackFoods[0])
-  const [cart, setCart] = useState([])
+  const [cart, setCart] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem('food-delivery-cart')) || []
+    } catch {
+      return []
+    }
+  })
   const [activeView, setActiveView] = useState('Home')
+  const [orderPlaced, setOrderPlaced] = useState(false)
+
+  useEffect(() => {
+    localStorage.setItem('food-delivery-cart', JSON.stringify(cart))
+  }, [cart])
 
   useEffect(() => {
     const loadFoods = async () => {
@@ -142,6 +160,21 @@ function App() {
     setActiveView('Cart')
   }
 
+  const updateCartQuantity = (foodId, change) => {
+    setCart((current) => current
+      .map((item) => item.id === foodId ? { ...item, qty: item.qty + change } : item)
+      .filter((item) => item.qty > 0))
+  }
+
+  const removeFromCart = (foodId) => {
+    setCart((current) => current.filter((item) => item.id !== foodId))
+  }
+
+  const placeOrder = () => {
+    setOrderPlaced(true)
+    setCart([])
+  }
+
   const cartTotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0)
 
   return (
@@ -160,7 +193,7 @@ function App() {
               className={activeView === item ? 'nav-link active' : 'nav-link'}
               onClick={() => setActiveView(item)}
             >
-              {item}
+              {item}{item === 'Cart' && cart.length > 0 ? ` (${cart.reduce((sum, item) => sum + item.qty, 0)})` : ''}
             </button>
           ))}
         </nav>
@@ -254,7 +287,7 @@ function App() {
               </div>
 
               <div className="food-grid product-grid">
-                {filteredFoods.map((food) => (
+                {filteredFoods.length === 0 ? <p className="no-results">No dishes match your search.</p> : filteredFoods.map((food) => (
                   <article
                     key={food.id}
                     className={selectedFood?.id === food.id ? 'food-card selected' : 'food-card'}
@@ -296,11 +329,37 @@ function App() {
         </main>
       )}
 
+      {activeView === 'Restaurants' && (
+        <main className="page-content restaurants-page">
+          <section className="page-intro">
+            <p className="mini-label">Curated for tonight</p>
+            <h2>Good food starts<br />with a good kitchen.</h2>
+            <p>Meet the local spots our delivery team keeps coming back to.</p>
+          </section>
+          <section className="restaurant-grid" aria-label="Featured restaurants">
+            {restaurants.map((restaurant) => (
+              <article className={`restaurant-card ${restaurant.accent}`} key={restaurant.name}>
+                <div className="restaurant-art">{restaurant.icon}</div>
+                <div className="restaurant-copy">
+                  <span className="restaurant-status">Open now</span>
+                  <h3>{restaurant.name}</h3>
+                  <p>{restaurant.cuisine}</p>
+                  <div className="restaurant-meta"><span>⭐ {restaurant.rating}</span><span>⏱ {restaurant.time}</span></div>
+                  <button type="button" className="card-btn" onClick={() => { setSelectedCategory('All'); setActiveView('Menu') }}>Browse menu</button>
+                </div>
+              </article>
+            ))}
+          </section>
+        </main>
+      )}
+
       {activeView === 'Cart' && (
         <main className="page-content cart-page">
           <h2>Your Cart</h2>
-          {cart.length === 0 ? (
-            <div className="empty-cart">Your cart is empty.</div>
+          {orderPlaced ? (
+            <div className="empty-cart order-success"><div className="success-icon">✓</div><h3>Order received</h3><p>Your kitchen is getting started. Estimated arrival: 30 minutes.</p><button type="button" className="primary-btn" onClick={() => { setOrderPlaced(false); setActiveView('Menu') }}>Order something else</button></div>
+          ) : cart.length === 0 ? (
+            <div className="empty-cart"><div className="empty-cart-icon">🛒</div><h3>Your cart is empty</h3><p>Pick a favorite and we will bring it to your door.</p><button type="button" className="primary-btn" onClick={() => setActiveView('Menu')}>Browse the menu</button></div>
           ) : (
             <div className="cart-layout">
               <div className="cart-items">
@@ -312,8 +371,9 @@ function App() {
                       <p>${item.price} each</p>
                     </div>
                     <div className="cart-actions">
-                      <span>Qty: {item.qty}</span>
+                      <div className="quantity-controls"><button type="button" aria-label={`Decrease ${item.name}`} onClick={() => updateCartQuantity(item.id, -1)}>-</button><span>{item.qty}</span><button type="button" aria-label={`Increase ${item.name}`} onClick={() => updateCartQuantity(item.id, 1)}>+</button></div>
                       <strong>${(item.price * item.qty).toFixed(2)}</strong>
+                      <button type="button" className="remove-btn" onClick={() => removeFromCart(item.id)}>Remove</button>
                     </div>
                   </div>
                 ))}
@@ -333,7 +393,7 @@ function App() {
                   <span>Total</span>
                   <strong>${(cartTotal + 4.99).toFixed(2)}</strong>
                 </div>
-                <button type="button" className="primary-btn checkout-btn">
+                <button type="button" className="primary-btn checkout-btn" onClick={placeOrder}>
                   Checkout
                 </button>
               </div>

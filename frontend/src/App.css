@@ -718,6 +718,153 @@ button {
   color: #5d5862;
 }
 
+.empty-cart h3 {
+  color: #1c1a1d;
+  font-size: 1.5rem;
+}
+
+.empty-cart p {
+  margin-top: 8px;
+}
+
+.empty-cart-icon,
+.success-icon {
+  display: grid;
+  place-items: center;
+  width: 68px;
+  height: 68px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  font-size: 2rem;
+  background: #fff0dc;
+}
+
+.success-icon {
+  color: white;
+  background: #5d9468;
+  font-weight: 800;
+}
+
+.empty-cart .primary-btn {
+  margin-top: 22px;
+}
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.quantity-controls button {
+  width: 28px;
+  height: 28px;
+  border: 1px solid #eaded5;
+  border-radius: 50%;
+  background: #fff8f2;
+  color: #e76d31;
+  font-weight: 700;
+}
+
+.quantity-controls span {
+  min-width: 18px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.remove-btn {
+  border: none;
+  background: transparent;
+  color: #c05242;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.restaurants-page {
+  gap: 34px;
+}
+
+.page-intro {
+  padding: 22px 10px 0;
+}
+
+.page-intro h2 {
+  margin-top: 16px;
+  font-size: clamp(2.2rem, 5vw, 4.2rem);
+  line-height: 1.04;
+  letter-spacing: -0.06em;
+  color: #17141d;
+}
+
+.page-intro > p:last-child {
+  margin-top: 16px;
+  color: #655e66;
+  font-size: 1.05rem;
+}
+
+.restaurant-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.restaurant-card {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  overflow: hidden;
+  min-height: 250px;
+  border-radius: 24px;
+  background: #e8f0df;
+  box-shadow: 0 18px 32px rgba(28, 19, 15, 0.05);
+}
+
+.restaurant-card.saffron { background: #fff0c9; }
+.restaurant-card.coral { background: #ffe0d5; }
+.restaurant-card.mint { background: #dceee6; }
+
+.restaurant-art {
+  display: grid;
+  place-items: center;
+  font-size: 5rem;
+  background: rgba(255, 255, 255, 0.34);
+}
+
+.restaurant-copy {
+  padding: 24px 20px;
+}
+
+.restaurant-status {
+  color: #4e8059;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.restaurant-copy h3 {
+  margin-top: 12px;
+  font-size: 1.45rem;
+}
+
+.restaurant-copy p {
+  margin-top: 6px;
+  color: #5c555b;
+  font-size: 0.9rem;
+}
+
+.restaurant-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 16px;
+  color: #373137;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.restaurant-copy .card-btn {
+  margin-top: 20px;
+}
+
 .auth-card {
   max-width: 480px;
   width: 100%;
@@ -826,5 +973,9 @@ button {
 
   .cart-item {
     flex-wrap: wrap;
+  }
+
+  .restaurant-grid {
+    grid-template-columns: 1fr;
   }
 }
