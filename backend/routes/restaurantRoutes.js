@@ -31,6 +31,12 @@ router.get('/restaurants/:id', async (req, res, next) => {
 router.post('/restaurants', requireAuth, requireAdmin, [body('name').trim().notEmpty(), body('cuisine').isArray({ min: 1 })], validate, async (req, res, next) => {
   try { res.status(201).json(await Restaurant.create({ ...req.body, ownerId: req.user._id })) } catch (error) { next(error) }
 })
+router.patch('/restaurants/:id', requireAuth, requireAdmin, async (req, res, next) => {
+  try { const restaurant = await Restaurant.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true }); if (!restaurant) return res.status(404).json({ message: 'Restaurant not found' }); res.json(restaurant) } catch (error) { next(error) }
+})
+router.delete('/restaurants/:id', requireAuth, requireAdmin, async (req, res, next) => {
+  try { const restaurant = await Restaurant.findByIdAndDelete(req.params.id); if (!restaurant) return res.status(404).json({ message: 'Restaurant not found' }); await Food.deleteMany({ restaurantId: restaurant._id }); res.json({ message: 'Restaurant deleted' }) } catch (error) { next(error) }
+})
 router.post('/restaurants/:id/reviews', requireAuth, [body('rating').isInt({ min: 1, max: 5 }), body('comment').optional().trim().isLength({ max: 1000 })], validate, async (req, res, next) => {
   try {
     const review = await Review.create({ ...req.body, restaurantId: req.params.id, userId: req.user._id })
@@ -45,6 +51,9 @@ router.post('/restaurants/:id/menu', requireAuth, requireAdmin, [body('name').tr
 })
 router.patch('/menu/:id', requireAuth, requireAdmin, async (req, res, next) => {
   try { const food = await Food.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true }); if (!food) return res.status(404).json({ message: 'Food item not found' }); res.json(food) } catch (error) { next(error) }
+})
+router.delete('/menu/:id', requireAuth, requireAdmin, async (req, res, next) => {
+  try { const food = await Food.findByIdAndDelete(req.params.id); if (!food) return res.status(404).json({ message: 'Food item not found' }); res.json({ message: 'Food item deleted' }) } catch (error) { next(error) }
 })
 
 module.exports = router
