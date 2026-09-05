@@ -27,6 +27,7 @@ function App() {
   const [token, setToken] = useState(() => localStorage.getItem('food-delivery-token') || '')
   const [addresses, setAddresses] = useState(() => JSON.parse(localStorage.getItem('food-delivery-addresses') || '[]'))
   const [newAddress, setNewAddress] = useState('')
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   useEffect(() => localStorage.setItem('food-delivery-cart', JSON.stringify(cart)), [cart])
   useEffect(() => localStorage.setItem('food-delivery-user', JSON.stringify(user)), [user])
@@ -51,6 +52,7 @@ function App() {
   })
   const toggleWishlist = (id) => setWishlist((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id])
   const goToMenu = (cuisine = 'All') => { setSelectedCuisine(cuisine); setActiveView('Menu') }
+  const navigate = (view) => { setActiveView(view); setMobileMenuOpen(false) }
   const placeOrder = async () => {
     if (token) {
       try {
@@ -65,11 +67,12 @@ function App() {
   return (
     <div className="app-shell">
       <header className="topbar">
-        <button className="brand" onClick={() => setActiveView('Home')}><span className="brand-mark">+</span><span>morsel<span className="brand-dot">.</span></span></button>
-        <button className="location-picker" onClick={() => setLocation(location === 'Indiranagar, Bengaluru' ? 'Koramangala, Bengaluru' : 'Indiranagar, Bengaluru')}><span className="pin">⌖</span><span><small>DELIVERING TO</small>{location}</span><b>⌄</b></button>
-        <nav className="nav-links" aria-label="Main navigation">{['Home', 'Menu', 'Orders', 'Admin'].map((item) => <button key={item} className={activeView === item ? 'active' : ''} onClick={() => setActiveView(item)}>{item}</button>)}</nav>
-        <div className="top-actions"><button className="icon-button" aria-label="Wishlist" onClick={() => setActiveView('Wishlist')}>♡<span>{wishlist.length}</span></button><button className="cart-button" onClick={() => setActiveView('Cart')}>Bag <b>{cartCount}</b></button><button className="avatar" onClick={() => setActiveView(user ? 'Profile' : 'Login')}>{user?.initials || 'AR'}</button></div>
+        <button className="brand" onClick={() => navigate('Home')}><span className="brand-mark">+</span><span>morsel<span className="brand-dot">.</span></span></button>
+        <nav className="nav-links" aria-label="Main navigation">{['Home', 'Menu', 'Orders', 'Admin'].map((item) => <button key={item} className={activeView === item ? 'active' : ''} onClick={() => navigate(item)}>{item}</button>)}</nav>
+        <div className="top-actions"><button className="icon-button" aria-label="Wishlist" onClick={() => navigate('Wishlist')}>♡<span>{wishlist.length}</span></button><button className="cart-button" onClick={() => navigate('Cart')}>Bag <b>{cartCount}</b></button><button className="avatar" onClick={() => navigate(user ? 'Profile' : 'Login')}>{user?.initials || 'AR'}</button><button className="menu-toggle" aria-label="Open navigation menu" aria-expanded={mobileMenuOpen} onClick={() => setMobileMenuOpen((open) => !open)}>☰</button></div>
       </header>
+      <button className="location-picker" onClick={() => setLocation(location === 'Indiranagar, Bengaluru' ? 'Koramangala, Bengaluru' : 'Indiranagar, Bengaluru')}><span className="pin">⌖</span><span><small>DELIVERING TO</small>{location}</span><b>⌄</b></button>
+      {mobileMenuOpen && <nav className="mobile-menu" aria-label="Mobile navigation">{['Home', 'Menu', 'Orders', 'Wishlist', 'Admin'].map((item) => <button key={item} className={activeView === item ? 'active' : ''} onClick={() => navigate(item)}>{item}</button>)}<button onClick={() => navigate(user ? 'Profile' : 'Login')}>{user ? 'Profile' : 'Sign in'}</button></nav>}
 
       {activeView === 'Home' && <main>
         <section className="welcome-row"><div><p className="kicker">THURSDAY, 12 SEPTEMBER</p><h1>Good food, <em>good mood.</em></h1><p className="welcome-copy">Curated comfort food from the best kitchens around you.</p></div><div className="weather-note"><span>☀</span><div><b>28°C</b><small>Perfect for a biryani</small></div></div></section>
@@ -86,6 +89,8 @@ function App() {
       {activeView === 'Admin' && <AdminDashboard />}
       {activeView === 'Login' && <AuthView mode={authMode} setMode={setAuthMode} onSubmit={(account, accountToken) => { setUser({ ...account, initials: account.name.split(' ').map((part) => part[0]).join('').slice(0, 2).toUpperCase() }); setToken(accountToken); localStorage.setItem('food-delivery-token', accountToken); setActiveView('Profile') }} />}
       {activeView === 'Profile' && <AccountView user={user} addresses={addresses} newAddress={newAddress} setNewAddress={setNewAddress} onAddAddress={() => { if (newAddress.trim()) { setAddresses((current) => [...current, { id: Date.now(), label: current.length ? 'Other' : 'Home', text: newAddress.trim() }]); setNewAddress('') } }} onRemoveAddress={(id) => setAddresses((current) => current.filter((address) => address.id !== id))} onLogout={() => { setUser(null); setActiveView('Login') }} onNavigate={setActiveView} />}
+      {cartCount > 0 && activeView !== 'Cart' && <button className="mobile-cart-fab" onClick={() => navigate('Cart')}><span>Bag</span><b>{cartCount} · ₹{subtotal}</b><span>→</span></button>}
+      <nav className="bottom-nav" aria-label="Mobile navigation"><button className={activeView === 'Home' ? 'active' : ''} onClick={() => navigate('Home')}><span>⌂</span>Home</button><button className={activeView === 'Menu' ? 'active' : ''} onClick={() => navigate('Menu')}><span>⌕</span>Menu</button><button className={activeView === 'Orders' ? 'active' : ''} onClick={() => navigate('Orders')}><span>◷</span>Orders</button><button className={activeView === 'Cart' ? 'active' : ''} onClick={() => navigate('Cart')}><span>▱</span>Bag</button></nav>
     </div>
   )
 }
