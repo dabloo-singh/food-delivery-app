@@ -36,8 +36,8 @@ const orderSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ['pending', 'confirmed', 'preparing', 'on-the-way', 'delivered', 'cancelled'],
-      default: 'pending',
+      enum: ['placed', 'confirmed', 'preparing', 'out-for-delivery', 'delivered', 'cancelled'],
+      default: 'placed',
     },
     paymentStatus: {
       type: String,
@@ -46,9 +46,11 @@ const orderSchema = new mongoose.Schema(
     },
     paymentMethod: {
       type: String,
-      enum: ['credit-card', 'debit-card', 'upi', 'wallet', 'cash'],
-      default: 'credit-card',
+      enum: ['razorpay', 'stripe', 'cash'],
+      default: 'cash',
     },
+    paymentProviderId: String,
+    statusHistory: [{ status: String, at: { type: Date, default: Date.now } }],
     estimatedDelivery: Date,
     actualDelivery: Date,
     notes: String,

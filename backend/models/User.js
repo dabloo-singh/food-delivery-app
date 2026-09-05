@@ -18,18 +18,20 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       minlength: 6,
+      select: false,
     },
     phone: {
       type: String,
       default: '',
     },
-    address: {
+    addresses: [{
+      label: { type: String, default: 'Home' },
       street: String,
       city: String,
       state: String,
       zipCode: String,
-      country: String,
-    },
+      country: { type: String, default: 'India' },
+    }],
     role: {
       type: String,
       enum: ['user', 'admin'],
@@ -54,5 +56,11 @@ const userSchema = new mongoose.Schema(
   },
   { timestamps: true },
 )
+
+  userSchema.methods.toSafeObject = function toSafeObject() {
+    const user = this.toObject()
+    delete user.password
+    return user
+  }
 
 module.exports = mongoose.model('User', userSchema)

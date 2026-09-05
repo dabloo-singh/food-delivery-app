@@ -30,6 +30,19 @@ const foodSchema = new mongoose.Schema(
       type: String,
       default: '🍽️',
     },
+    restaurantId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Restaurant',
+    },
+    isAvailable: {
+      type: Boolean,
+      default: true,
+    },
+    customizationOptions: [{
+      name: String,
+      choices: [String],
+      required: Boolean,
+    }],
   },
   { timestamps: true },
 )

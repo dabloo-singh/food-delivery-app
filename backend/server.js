@@ -3,6 +3,11 @@ const cors = require('cors')
 const dotenv = require('dotenv')
 const connectDB = require('./config/db')
 const foodRoutes = require('./routes/foodRoutes')
+const authRoutes = require('./routes/authRoutes')
+const restaurantRoutes = require('./routes/restaurantRoutes')
+const orderRoutes = require('./routes/orderRoutes')
+const paymentRoutes = require('./routes/paymentRoutes')
+const adminRoutes = require('./routes/adminRoutes')
 
 dotenv.config()
 
@@ -20,6 +25,17 @@ app.get('/api/health', (req, res) => {
 })
 
 app.use('/api', foodRoutes)
+app.use('/api/auth', authRoutes)
+app.use('/api', restaurantRoutes)
+app.use('/api', orderRoutes)
+app.use('/api', paymentRoutes)
+app.use('/api', adminRoutes)
+
+app.use((error, req, res, next) => {
+  console.error(error)
+  if (res.headersSent) return next(error)
+  res.status(error.statusCode || 500).json({ message: 'Something went wrong', error: process.env.NODE_ENV === 'production' ? undefined : error.message })
+})
 
 connectDB()
   .then(() => {

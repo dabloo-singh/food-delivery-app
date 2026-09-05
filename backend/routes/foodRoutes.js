@@ -1,6 +1,8 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const Food = require('../models/Food')
+const { requireAuth } = require('../middleware/authMiddleware')
+const { requireAdmin } = require('../middleware/adminMiddleware')
 
 const router = express.Router()
 
@@ -80,7 +82,7 @@ router.get('/foods', async (req, res) => {
   }
 })
 
-router.post('/foods', async (req, res) => {
+router.post('/foods', requireAuth, requireAdmin, async (req, res) => {
   try {
     const food = new Food(req.body)
     const savedFood = await food.save()

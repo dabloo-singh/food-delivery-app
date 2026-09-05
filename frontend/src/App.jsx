@@ -22,8 +22,15 @@ function App() {
   const [appliedCoupon, setAppliedCoupon] = useState(false)
   const [orderPlaced, setOrderPlaced] = useState(false)
   const [cart, setCart] = useState(() => JSON.parse(localStorage.getItem('food-delivery-cart') || '[]'))
+  const [authMode, setAuthMode] = useState('login')
+  const [user, setUser] = useState(() => JSON.parse(localStorage.getItem('food-delivery-user') || 'null'))
+  const [token, setToken] = useState(() => localStorage.getItem('food-delivery-token') || '')
+  const [addresses, setAddresses] = useState(() => JSON.parse(localStorage.getItem('food-delivery-addresses') || '[]'))
+  const [newAddress, setNewAddress] = useState('')
 
   useEffect(() => localStorage.setItem('food-delivery-cart', JSON.stringify(cart)), [cart])
+  useEffect(() => localStorage.setItem('food-delivery-user', JSON.stringify(user)), [user])
+  useEffect(() => localStorage.setItem('food-delivery-addresses', JSON.stringify(addresses)), [addresses])
   useEffect(() => {
     fetch('/api/foods').then((response) => response.json()).then((data) => {
       if (Array.isArray(data) && data.length) setFoods(data.map((food, index) => ({ ...starterFoods[index % starterFoods.length], ...food, id: food._id || index })))
@@ -44,6 +51,16 @@ function App() {
   })
   const toggleWishlist = (id) => setWishlist((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id])
   const goToMenu = (cuisine = 'All') => { setSelectedCuisine(cuisine); setActiveView('Menu') }
+  const placeOrder = async () => {
+    if (token) {
+      try {
+        const response = await fetch('/api/orders', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify({ items: cart.map((item) => ({ foodId: item.id, quantity: item.qty })), deliveryAddress: addresses[0] || { street: location, city: 'Bengaluru' }, paymentMethod: 'cash' }) })
+        if (!response.ok) throw new Error('Order request failed')
+      } catch (error) { console.error(error) }
+    }
+    setOrderPlaced(true)
+    setCart([])
+  }
 
   return (
     <div className="app-shell">
@@ -51,7 +68,7 @@ function App() {
         <button className="brand" onClick={() => setActiveView('Home')}><span className="brand-mark">+</span><span>morsel<span className="brand-dot">.</span></span></button>
         <button className="location-picker" onClick={() => setLocation(location === 'Indiranagar, Bengaluru' ? 'Koramangala, Bengaluru' : 'Indiranagar, Bengaluru')}><span className="pin">⌖</span><span><small>DELIVERING TO</small>{location}</span><b>⌄</b></button>
         <nav className="nav-links" aria-label="Main navigation">{['Home', 'Menu', 'Orders', 'Admin'].map((item) => <button key={item} className={activeView === item ? 'active' : ''} onClick={() => setActiveView(item)}>{item}</button>)}</nav>
-        <div className="top-actions"><button className="icon-button" aria-label="Wishlist" onClick={() => setActiveView('Wishlist')}>♡<span>{wishlist.length}</span></button><button className="cart-button" onClick={() => setActiveView('Cart')}>Bag <b>{cartCount}</b></button><button className="avatar" onClick={() => setActiveView('Login')}>AR</button></div>
+        <div className="top-actions"><button className="icon-button" aria-label="Wishlist" onClick={() => setActiveView('Wishlist')}>♡<span>{wishlist.length}</span></button><button className="cart-button" onClick={() => setActiveView('Cart')}>Bag <b>{cartCount}</b></button><button className="avatar" onClick={() => setActiveView(user ? 'Profile' : 'Login')}>{user?.initials || 'AR'}</button></div>
       </header>
 
       {activeView === 'Home' && <main>
@@ -64,10 +81,11 @@ function App() {
 
       {activeView === 'Menu' && <main className="content-page"><div className="page-title"><div><p className="kicker">THE FULL MENU</p><h1>Find your next favourite.</h1></div><div className="filter-note">{filteredFoods.length} dishes · <span>Sorted by relevance</span></div></div><div className="menu-toolbar"><div className="search-wrap compact"><span>⌕</span><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search everything" /></div><div className="filter-row">{cuisines.map((item) => <button key={item} className={selectedCuisine === item ? 'selected' : ''} onClick={() => setSelectedCuisine(item)}>{item}</button>)}</div></div><div className="menu-layout"><div className="food-grid menu-grid">{filteredFoods.map((food) => <FoodCard key={food.id} food={food} wished={wishlist.includes(food.id)} onWish={toggleWishlist} onAdd={addToCart} />)}</div><aside className="order-aside"><p className="kicker">YOUR ORDER</p><h3>{cartCount ? `${cartCount} items in your bag` : 'Your bag is waiting'}</h3>{cart.slice(0, 2).map((item) => <div className="mini-order" key={item.id}><span>{item.name}</span><b>₹{item.price * item.qty}</b></div>)}<button className="primary-button full" onClick={() => setActiveView('Cart')}>{cartCount ? `View bag · ₹${subtotal}` : 'Start an order'} <span>→</span></button></aside></div></main>}
       {activeView === 'Wishlist' && <main className="content-page"><div className="page-title"><div><p className="kicker">SAVED FOR LATER</p><h1>Your wishlist.</h1></div></div><div className="food-grid menu-grid">{foods.filter((food) => wishlist.includes(food.id)).map((food) => <FoodCard key={food.id} food={food} wished onWish={toggleWishlist} onAdd={addToCart} />)}</div></main>}
-      {activeView === 'Cart' && <main className="content-page"><div className="page-title"><div><p className="kicker">CHECKOUT</p><h1>Almost yours.</h1></div><span className="secure-note">⌁ Secure checkout</span></div>{orderPlaced ? <Tracking /> : <div className="checkout-layout"><div className="cart-list">{cart.length ? cart.map((item) => <div className="cart-line" key={item.id}><img src={item.image} alt="" /><div><h3>{item.name}</h3><p>{item.restaurant}</p></div><b>₹{item.price * item.qty}</b><button onClick={() => setCart((current) => current.filter((entry) => entry.id !== item.id))}>×</button></div>) : <div className="empty-state"><span>＋</span><h2>Your bag is empty</h2><p>Something delicious is only a few clicks away.</p><button className="primary-button" onClick={() => setActiveView('Menu')}>Browse menu</button></div>}</div><aside className="summary-card"><div className="coupon-input"><input value={coupon} onChange={(event) => setCoupon(event.target.value)} placeholder="Have a coupon?" /><button onClick={() => coupon && setAppliedCoupon(true)}>Apply</button></div><div className="summary-row"><span>Subtotal</span><b>₹{subtotal}</b></div><div className="summary-row"><span>Delivery fee</span><b className={delivery === 0 ? 'green-text' : ''}>{delivery ? `₹${delivery}` : 'FREE'}</b></div>{appliedCoupon && <div className="summary-row green-text"><span>FIRSTBITE</span><b>-₹100</b></div>}<div className="summary-total"><span>Total</span><b>₹{Math.max(total, 0)}</b></div><button disabled={!cart.length} className="primary-button full" onClick={() => { setOrderPlaced(true); setCart([]) }}>Place order <span>→</span></button></aside></div>}</main>}
+      {activeView === 'Cart' && <main className="content-page"><div className="page-title"><div><p className="kicker">CHECKOUT</p><h1>Almost yours.</h1></div><span className="secure-note">⌁ Secure checkout</span></div>{orderPlaced ? <Tracking /> : <div className="checkout-layout"><div className="cart-list">{cart.length ? cart.map((item) => <div className="cart-line" key={item.id}><img src={item.image} alt="" /><div><h3>{item.name}</h3><p>{item.restaurant}</p></div><b>₹{item.price * item.qty}</b><button onClick={() => setCart((current) => current.filter((entry) => entry.id !== item.id))}>×</button></div>) : <div className="empty-state"><span>＋</span><h2>Your bag is empty</h2><p>Something delicious is only a few clicks away.</p><button className="primary-button" onClick={() => setActiveView('Menu')}>Browse menu</button></div>}</div><aside className="summary-card"><div className="coupon-input"><input value={coupon} onChange={(event) => setCoupon(event.target.value)} placeholder="Have a coupon?" /><button onClick={() => coupon && setAppliedCoupon(true)}>Apply</button></div><div className="summary-row"><span>Subtotal</span><b>₹{subtotal}</b></div><div className="summary-row"><span>Delivery fee</span><b className={delivery === 0 ? 'green-text' : ''}>{delivery ? `₹${delivery}` : 'FREE'}</b></div>{appliedCoupon && <div className="summary-row green-text"><span>FIRSTBITE</span><b>-₹100</b></div>}<div className="summary-total"><span>Total</span><b>₹{Math.max(total, 0)}</b></div><button disabled={!cart.length} className="primary-button full" onClick={placeOrder}>Place order <span>→</span></button></aside></div>}</main>}
       {activeView === 'Orders' && <main className="content-page"><div className="page-title"><div><p className="kicker">YOUR ORDERS</p><h1>Follow the flavour.</h1></div></div><Tracking past /></main>}
       {activeView === 'Admin' && <AdminDashboard />}
-      {activeView === 'Login' && <main className="content-page auth-page"><div className="auth-card"><span className="brand-mark">+</span><p className="kicker">WELCOME BACK</p><h1>Sign in to morsel.</h1><input placeholder="Email address" /><input placeholder="Password" type="password" /><button className="primary-button full">Continue <span>→</span></button></div></main>}
+      {activeView === 'Login' && <AuthView mode={authMode} setMode={setAuthMode} onSubmit={(account, accountToken) => { setUser({ ...account, initials: account.name.split(' ').map((part) => part[0]).join('').slice(0, 2).toUpperCase() }); setToken(accountToken); localStorage.setItem('food-delivery-token', accountToken); setActiveView('Profile') }} />}
+      {activeView === 'Profile' && <AccountView user={user} addresses={addresses} newAddress={newAddress} setNewAddress={setNewAddress} onAddAddress={() => { if (newAddress.trim()) { setAddresses((current) => [...current, { id: Date.now(), label: current.length ? 'Other' : 'Home', text: newAddress.trim() }]); setNewAddress('') } }} onRemoveAddress={(id) => setAddresses((current) => current.filter((address) => address.id !== id))} onLogout={() => { setUser(null); setActiveView('Login') }} onNavigate={setActiveView} />}
     </div>
   )
 }
@@ -78,6 +96,31 @@ function FoodCard({ food, wished, onWish, onAdd }) {
 
 function Tracking({ past = false }) {
   return <div className="tracking-layout"><div className="tracking-card"><div className="tracking-head"><div><p className="kicker">{past ? 'DELIVERED  ·  TODAY, 1:12 PM' : 'ORDER #MO-2841  ·  JUST NOW'}</p><h2>{past ? 'Delivered with care.' : 'Your order is on its way.'}</h2></div><span className="status-chip">{past ? 'Delivered' : '18 min left'}</span></div><div className="map-panel"><div className="map-road road-one" /><div className="map-road road-two" /><div className="map-dot start" /><div className="map-dot end">⌖</div><div className="delivery-pin">✦</div></div><div className="progress-steps"><div className="done"><span>✓</span><b>Confirmed</b><small>12:42 PM</small></div><div className="done"><span>✓</span><b>Preparing</b><small>12:48 PM</small></div><div className={!past ? 'current' : 'done'}><span>{past ? '✓' : '●'}</span><b>{past ? 'Delivered' : 'On the way'}</b><small>{past ? '1:12 PM' : 'Arriving soon'}</small></div></div></div><aside className="driver-card"><div className="driver-avatar">RK</div><div><p className="kicker">YOUR DELIVERY PARTNER</p><h3>Rakesh is on the way</h3><p>Royal Enfield · KA 05 MJ 2291</p></div><button className="call-button">☎</button></aside></div>
+}
+
+function AuthView({ mode, setMode, onSubmit }) {
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const submit = async (event) => {
+    event.preventDefault()
+    const payload = mode === 'login' ? { email, password } : { name, email, password }
+    try {
+      const response = await fetch(`/api/auth/${mode === 'login' ? 'login' : 'register'}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+      const data = await response.json()
+      if (!response.ok) throw new Error(data.message || 'Unable to continue')
+      onSubmit(data.user, data.token)
+    } catch (requestError) {
+      setError(requestError.message)
+      if (requestError.message === 'Failed to fetch') onSubmit({ name: name || 'Ananya Rao', email: email || 'ananya@example.com' }, '')
+    }
+  }
+  return <main className="content-page auth-page"><form className="auth-card" onSubmit={submit}><span className="brand-mark">+</span><p className="kicker">{mode === 'login' ? 'WELCOME BACK' : 'JOIN MORSEL'}</p><h1>{mode === 'login' ? 'Sign in to morsel.' : 'Make every meal yours.'}</h1>{mode === 'signup' && <input value={name} onChange={(event) => setName(event.target.value)} placeholder="Full name" required /> }<input value={email} onChange={(event) => setEmail(event.target.value)} placeholder="Email address" type="email" required /><input value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Password" type="password" required />{error && <p className="auth-error">{error}</p>}<button className="primary-button full" type="submit">{mode === 'login' ? 'Continue' : 'Create account'} <span>→</span></button><button className="auth-switch" type="button" onClick={() => { setError(''); setMode(mode === 'login' ? 'signup' : 'login') }}>{mode === 'login' ? 'New to morsel? Create an account' : 'Already have an account? Sign in'}</button></form></main>
+}
+
+function AccountView({ user, addresses, newAddress, setNewAddress, onAddAddress, onRemoveAddress, onLogout, onNavigate }) {
+  return <main className="content-page account-page"><div className="page-title"><div><p className="kicker">YOUR MORSEL ACCOUNT</p><h1>Made for you.</h1></div><button className="text-button" onClick={onLogout}>Sign out</button></div><div className="account-layout"><aside className="profile-card"><div className="profile-avatar">{user?.initials || 'AR'}</div><h2>{user?.name || 'Ananya Rao'}</h2><p>{user?.email || 'ananya@example.com'}</p><button className="primary-button full" onClick={() => onNavigate('Orders')}>View order history <span>→</span></button></aside><section className="account-main"><div className="account-section"><div className="account-heading"><div><p className="kicker">SAVED PLACES</p><h2>Delivery addresses</h2></div><span>{addresses.length} saved</span></div><div className="address-list">{addresses.map((address) => <div className="address-row" key={address.id}><span className="address-icon">⌖</span><div><b>{address.label}</b><p>{address.text}</p></div><button onClick={() => onRemoveAddress(address.id)} aria-label={`Remove ${address.label} address`}>×</button></div>)}{!addresses.length && <p className="muted-copy">Add a home, work, or favourite delivery spot.</p>}</div><div className="address-form"><input value={newAddress} onChange={(event) => setNewAddress(event.target.value)} placeholder="Add an address, landmark or area" /><button className="add-button" onClick={onAddAddress}>+ Save address</button></div></div><div className="account-quick"><button onClick={() => onNavigate('Wishlist')}><span>♡</span><div><b>Favorites</b><small>Your saved dishes</small></div><strong>→</strong></button><button onClick={() => onNavigate('Orders')}><span>◷</span><div><b>Order history</b><small>Track past deliveries</small></div><strong>→</strong></button><button onClick={() => onNavigate('Cart')}><span>▱</span><div><b>Your cart</b><small>Ready when you are</small></div><strong>→</strong></button></div></section></div></main>
 }
 
 function AdminDashboard() {
