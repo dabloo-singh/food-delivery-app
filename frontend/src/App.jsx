@@ -2,41 +2,233 @@ import { useEffect, useMemo, useState } from 'react'
 import './App.css'
 
 const cuisines = ['All', 'Indian', 'Pizza', 'Burgers', 'Chinese', 'Healthy', 'Desserts']
+
 const demoRestaurants = [
-  { id: 'curry-room', name: 'The Curry Room', cuisine: ['Indian'], rating: 4.8, reviews: 342, deliveryTime: '25-35 min', priceForTwo: 550, offer: '20% off up to ₹100', image: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=900&q=80', description: 'Slow-cooked classics, fragrant biryanis, and comfort food from across India.' },
-  { id: 'olive-ember', name: 'Olive & Ember', cuisine: ['Pizza', 'Italian'], rating: 4.9, reviews: 218, deliveryTime: '30-40 min', priceForTwo: 700, offer: 'Free delivery', image: 'https://images.unsplash.com/photo-1579751626657-72bc17010498?auto=format&fit=crop&w=900&q=80', description: 'Wood-fired pizzas and small plates made with bright, seasonal ingredients.' },
-  { id: 'stacked', name: 'Stacked', cuisine: ['Burgers'], rating: 4.7, reviews: 189, deliveryTime: '20-30 min', priceForTwo: 450, offer: '₹125 off above ₹599', image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=900&q=80', description: 'Messy, juicy smash burgers with crisp sides and house sauces.' },
-  { id: 'wok-street', name: 'Wok Street', cuisine: ['Chinese'], rating: 4.6, reviews: 156, deliveryTime: '20-30 min', priceForTwo: 500, offer: '10% off today', image: 'https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=900&q=80', description: 'Fast wok-fired noodles, dumplings, and chilli-forward favourites.' },
-  { id: 'green-table', name: 'Green Table', cuisine: ['Healthy'], rating: 4.7, reviews: 94, deliveryTime: '15-25 min', priceForTwo: 600, offer: 'Free dessert on orders above ₹499', image: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=900&q=80', description: 'Colourful bowls and fresh, feel-good food for everyday eating.' },
-  { id: 'sugar-rush', name: 'Sugar Rush', cuisine: ['Desserts'], rating: 4.8, reviews: 122, deliveryTime: '15-20 min', priceForTwo: 350, offer: 'Buy 2, get 1 free', image: 'https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=900&q=80', description: 'Small-batch cakes, puddings, and sweet treats for every mood.' },
+  {
+    id: 'curry-room',
+    name: 'The Curry Room',
+    cuisine: ['Indian'],
+    rating: 4.8,
+    reviews: 342,
+    deliveryTime: '25-35 min',
+    priceForTwo: 550,
+    offer: '20% off up to ₹100',
+    image: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=900&q=80',
+    description: 'Slow-cooked classics, fragrant biryanis, and comfort food from across India.',
+  },
+  {
+    id: 'olive-ember',
+    name: 'Olive & Ember',
+    cuisine: ['Pizza', 'Italian'],
+    rating: 4.9,
+    reviews: 218,
+    deliveryTime: '30-40 min',
+    priceForTwo: 700,
+    offer: 'Free delivery',
+    image: 'https://images.unsplash.com/photo-1579751626657-72bc17010498?auto=format&fit=crop&w=900&q=80',
+    description: 'Wood-fired pizzas and small plates made with bright, seasonal ingredients.',
+  },
+  {
+    id: 'stacked',
+    name: 'Stacked',
+    cuisine: ['Burgers'],
+    rating: 4.7,
+    reviews: 189,
+    deliveryTime: '20-30 min',
+    priceForTwo: 450,
+    offer: '₹125 off above ₹599',
+    image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=900&q=80',
+    description: 'Messy, juicy smash burgers with crisp sides and house sauces.',
+  },
+  {
+    id: 'wok-street',
+    name: 'Wok Street',
+    cuisine: ['Chinese'],
+    rating: 4.6,
+    reviews: 156,
+    deliveryTime: '20-30 min',
+    priceForTwo: 500,
+    offer: '10% off today',
+    image: 'https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=900&q=80',
+    description: 'Fast wok-fired noodles, dumplings, and chilli-forward favourites.',
+  },
+  {
+    id: 'green-table',
+    name: 'Green Table',
+    cuisine: ['Healthy'],
+    rating: 4.7,
+    reviews: 94,
+    deliveryTime: '15-25 min',
+    priceForTwo: 600,
+    offer: 'Free dessert on orders above ₹499',
+    image: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=900&q=80',
+    description: 'Colourful bowls and fresh, feel-good food for everyday eating.',
+  },
+  {
+    id: 'sugar-rush',
+    name: 'Sugar Rush',
+    cuisine: ['Desserts'],
+    rating: 4.8,
+    reviews: 122,
+    deliveryTime: '15-20 min',
+    priceForTwo: 350,
+    offer: 'Buy 2, get 1 free',
+    image: 'https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=900&q=80',
+    description: 'Small-batch cakes, puddings, and sweet treats for every mood.',
+  },
 ]
+
 const starterFoods = [
-  { id: 1, name: 'Butter Chicken Bowl', restaurant: 'The Curry Room', restaurantId: 'curry-room', category: 'Indian', price: 289, rating: 4.8, reviews: 342, time: '28 min', tag: 'Bestseller', image: 'https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?auto=format&fit=crop&w=700&q=80', description: 'Tender chicken in a silky tomato gravy with fragrant rice.', isVeg: false },
-  { id: 2, name: 'Truffle Mushroom Pizza', restaurant: 'Olive & Ember', restaurantId: 'olive-ember', category: 'Pizza', price: 449, rating: 4.9, reviews: 218, time: '32 min', tag: 'Top rated', image: 'https://images.unsplash.com/photo-1579751626657-72bc17010498?auto=format&fit=crop&w=700&q=80', description: 'Wild mushrooms, truffle oil, mozzarella, and fresh herbs.', isVeg: true },
-  { id: 3, name: 'Smash & Stack Burger', restaurant: 'Stacked', restaurantId: 'stacked', category: 'Burgers', price: 329, rating: 4.7, reviews: 189, time: '24 min', tag: '20% off', image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=700&q=80', description: 'Double smash patty, cheddar, pickles, and signature sauce.', isVeg: false },
-  { id: 4, name: 'Chilli Garlic Noodles', restaurant: 'Wok Street', restaurantId: 'wok-street', category: 'Chinese', price: 249, rating: 4.6, reviews: 156, time: '21 min', tag: 'Popular', image: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?auto=format&fit=crop&w=700&q=80', description: 'Wok-tossed noodles with garlic, vegetables, and chilli crisp.', isVeg: true },
-  { id: 5, name: 'Green Goddess Bowl', restaurant: 'Green Table', restaurantId: 'green-table', category: 'Healthy', price: 299, rating: 4.7, reviews: 94, time: '18 min', tag: 'Fresh pick', image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=700&q=80', description: 'Greens, grains, avocado, roasted vegetables, and citrus dressing.', isVeg: true },
-  { id: 6, name: 'Mango Tres Leches', restaurant: 'Sugar Rush', restaurantId: 'sugar-rush', category: 'Desserts', price: 199, rating: 4.8, reviews: 122, time: '15 min', tag: 'New', image: 'https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=700&q=80', description: 'Cloud-soft sponge, mango cream, and a bright fruit finish.', isVeg: true },
+  {
+    id: 1,
+    name: 'Butter Chicken Bowl',
+    restaurant: 'The Curry Room',
+    restaurantId: 'curry-room',
+    category: 'Indian',
+    price: 289,
+    rating: 4.8,
+    reviews: 342,
+    time: '28 min',
+    tag: 'Bestseller',
+    image: 'https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?auto=format&fit=crop&w=700&q=80',
+    description: 'Tender chicken in a silky tomato gravy with fragrant rice.',
+    isVeg: false,
+  },
+  {
+    id: 2,
+    name: 'Truffle Mushroom Pizza',
+    restaurant: 'Olive & Ember',
+    restaurantId: 'olive-ember',
+    category: 'Pizza',
+    price: 449,
+    rating: 4.9,
+    reviews: 218,
+    time: '32 min',
+    tag: 'Top rated',
+    image: 'https://images.unsplash.com/photo-1579751626657-72bc17010498?auto=format&fit=crop&w=700&q=80',
+    description: 'Wild mushrooms, truffle oil, mozzarella, and fresh herbs.',
+    isVeg: true,
+  },
+  {
+    id: 3,
+    name: 'Smash & Stack Burger',
+    restaurant: 'Stacked',
+    restaurantId: 'stacked',
+    category: 'Burgers',
+    price: 329,
+    rating: 4.7,
+    reviews: 189,
+    time: '24 min',
+    tag: '20% off',
+    image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=700&q=80',
+    description: 'Double smash patty, cheddar, pickles, and signature sauce.',
+    isVeg: false,
+  },
+  {
+    id: 4,
+    name: 'Chilli Garlic Noodles',
+    restaurant: 'Wok Street',
+    restaurantId: 'wok-street',
+    category: 'Chinese',
+    price: 249,
+    rating: 4.6,
+    reviews: 156,
+    time: '21 min',
+    tag: 'Popular',
+    image: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?auto=format&fit=crop&w=700&q=80',
+    description: 'Wok-tossed noodles with garlic, vegetables, and chilli crisp.',
+    isVeg: true,
+  },
+  {
+    id: 5,
+    name: 'Green Goddess Bowl',
+    restaurant: 'Green Table',
+    restaurantId: 'green-table',
+    category: 'Healthy',
+    price: 299,
+    rating: 4.7,
+    reviews: 94,
+    time: '18 min',
+    tag: 'Fresh pick',
+    image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=700&q=80',
+    description: 'Greens, grains, avocado, roasted vegetables, and citrus dressing.',
+    isVeg: true,
+  },
+  {
+    id: 6,
+    name: 'Mango Tres Leches',
+    restaurant: 'Sugar Rush',
+    restaurantId: 'sugar-rush',
+    category: 'Desserts',
+    price: 199,
+    rating: 4.8,
+    reviews: 122,
+    time: '15 min',
+    tag: 'New',
+    image: 'https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=700&q=80',
+    description: 'Cloud-soft sponge, mango cream, and a bright fruit finish.',
+    isVeg: true,
+  },
 ]
 
 function App() {
   const [foods, setFoods] = useState(starterFoods)
   const [restaurants, setRestaurants] = useState(demoRestaurants)
+
   const [activeView, setActiveView] = useState('Home')
   const [activeRestaurant, setActiveRestaurant] = useState(null)
+
   const [selectedCuisine, setSelectedCuisine] = useState('All')
   const [dietaryFilter, setDietaryFilter] = useState('all')
   const [search, setSearch] = useState('')
+
+  // New restaurant filters
+  const [ratingFilter, setRatingFilter] = useState('all')
+  const [deliveryFilter, setDeliveryFilter] = useState('all')
+  const [priceFilter, setPriceFilter] = useState('all')
+  const [offerOnly, setOfferOnly] = useState(false)
+  const [sortBy, setSortBy] = useState('relevance')
+
   const [location, setLocation] = useState('Indiranagar, Bengaluru')
   const [wishlist, setWishlist] = useState([2])
+
   const [coupon, setCoupon] = useState('')
   const [appliedCoupon, setAppliedCoupon] = useState(false)
+
   const [orderPlaced, setOrderPlaced] = useState(false)
-  const [cart, setCart] = useState(() => JSON.parse(localStorage.getItem('food-delivery-cart') || '[]'))
+
+  const [cart, setCart] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem('food-delivery-cart') || '[]')
+    } catch {
+      return []
+    }
+  })
+
   const [authMode, setAuthMode] = useState('login')
-  const [user, setUser] = useState(() => JSON.parse(localStorage.getItem('food-delivery-user') || 'null'))
-  const [token, setToken] = useState(() => localStorage.getItem('food-delivery-token') || '')
-  const [addresses, setAddresses] = useState(() => JSON.parse(localStorage.getItem('food-delivery-addresses') || '[]'))
+
+  const [user, setUser] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem('food-delivery-user') || 'null')
+    } catch {
+      return null
+    }
+  })
+
+  const [token, setToken] = useState(
+    () => localStorage.getItem('food-delivery-token') || ''
+  )
+
+  const [addresses, setAddresses] = useState(() => {
+    try {
+      return JSON.parse(
+        localStorage.getItem('food-delivery-addresses') || '[]'
+      )
+    } catch {
+      return []
+    }
+  })
+
   const [newAddress, setNewAddress] = useState('')
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [deliveryInstructions, setDeliveryInstructions] = useState('')
@@ -45,53 +237,364 @@ function App() {
   const [checkoutError, setCheckoutError] = useState('')
   const [orderNumber, setOrderNumber] = useState('MRS10245')
 
-  useEffect(() => localStorage.setItem('food-delivery-cart', JSON.stringify(cart)), [cart])
-  useEffect(() => localStorage.setItem('food-delivery-user', JSON.stringify(user)), [user])
-  useEffect(() => localStorage.setItem('food-delivery-addresses', JSON.stringify(addresses)), [addresses])
   useEffect(() => {
-    fetch('/api/foods').then((response) => response.json()).then((data) => {
-      if (Array.isArray(data) && data.length) setFoods(data.map((food, index) => ({ ...starterFoods[index % starterFoods.length], ...food, id: food._id || index, restaurantId: food.restaurantId?.toString() || starterFoods[index % starterFoods.length].restaurantId })))
-    }).catch(() => {})
-    fetch('/api/restaurants').then((response) => response.json()).then((data) => { if (Array.isArray(data) && data.length) setRestaurants(data.map((restaurant, index) => ({ ...demoRestaurants[index % demoRestaurants.length], ...restaurant, id: restaurant._id }))) }).catch(() => {})
+    localStorage.setItem('food-delivery-cart', JSON.stringify(cart))
+  }, [cart])
+
+  useEffect(() => {
+    localStorage.setItem('food-delivery-user', JSON.stringify(user))
+  }, [user])
+
+  useEffect(() => {
+    localStorage.setItem(
+      'food-delivery-addresses',
+      JSON.stringify(addresses)
+    )
+  }, [addresses])
+
+  useEffect(() => {
+    fetch('/api/foods')
+      .then((response) => response.json())
+      .then((data) => {
+        if (Array.isArray(data) && data.length) {
+          setFoods(
+            data.map((food, index) => ({
+              ...starterFoods[index % starterFoods.length],
+              ...food,
+              id: food._id || index,
+              restaurantId:
+                food.restaurantId?.toString() ||
+                starterFoods[index % starterFoods.length].restaurantId,
+            }))
+          )
+        }
+      })
+      .catch(() => {})
+
+    fetch('/api/restaurants')
+      .then((response) => response.json())
+      .then((data) => {
+        if (Array.isArray(data) && data.length) {
+          setRestaurants(
+            data.map((restaurant, index) => ({
+              ...demoRestaurants[index % demoRestaurants.length],
+              ...restaurant,
+              id: restaurant._id || restaurant.id,
+            }))
+          )
+        }
+      })
+      .catch(() => {})
   }, [])
 
-  const filteredFoods = useMemo(() => foods.filter((food) => {
-    const query = search.toLowerCase()
-    const matchesDiet = dietaryFilter === 'all' || (dietaryFilter === 'veg' ? food.isVeg !== false : food.isVeg === false)
-    return (selectedCuisine === 'All' || food.category === selectedCuisine) && matchesDiet && (`${food.name} ${food.restaurant} ${food.category}`).toLowerCase().includes(query)
-  }), [foods, search, selectedCuisine, dietaryFilter])
-  const restaurantFoods = useMemo(() => activeRestaurant ? foods.filter((food) => food.restaurantId === activeRestaurant.id || food.restaurant === activeRestaurant.name) : [], [foods, activeRestaurant])
-  const popularRestaurants = useMemo(() => restaurants.filter((restaurant) => restaurant.isOpen !== false).sort((first, second) => second.rating - first.rating), [restaurants])
-  const cartCount = cart.reduce((sum, item) => sum + item.qty, 0)
-  const subtotal = cart.reduce((sum, item) => sum + Number(item.price) * item.qty, 0)
-  const delivery = subtotal > 499 || appliedCoupon ? 0 : 40
+  // Food filtering
+  const filteredFoods = useMemo(
+    () =>
+      foods.filter((food) => {
+        const query = search.toLowerCase()
+
+        const matchesDiet =
+          dietaryFilter === 'all' ||
+          (dietaryFilter === 'veg'
+            ? food.isVeg !== false
+            : food.isVeg === false)
+
+        return (
+          (selectedCuisine === 'All' ||
+            food.category === selectedCuisine) &&
+          matchesDiet &&
+          `${food.name} ${food.restaurant} ${food.category}`
+            .toLowerCase()
+            .includes(query)
+        )
+      }),
+    [foods, search, selectedCuisine, dietaryFilter]
+  )
+
+  const restaurantFoods = useMemo(
+    () =>
+      activeRestaurant
+        ? foods.filter(
+            (food) =>
+              food.restaurantId === activeRestaurant.id ||
+              food.restaurant === activeRestaurant.name
+          )
+        : [],
+    [foods, activeRestaurant]
+  )
+
+  // Restaurant filtering + sorting
+  const filteredRestaurants = useMemo(() => {
+    const query = search.trim().toLowerCase()
+
+    const getMinimumDeliveryTime = (time = '') => {
+      const match = String(time).match(/\d+/)
+      return match ? Number(match[0]) : 999
+    }
+
+    let result = restaurants.filter((restaurant) => {
+      const searchableText = [
+        restaurant.name,
+        ...(Array.isArray(restaurant.cuisine)
+          ? restaurant.cuisine
+          : []),
+        restaurant.description || '',
+      ]
+        .join(' ')
+        .toLowerCase()
+
+      const matchesSearch =
+        !query || searchableText.includes(query)
+
+      const restaurantCuisines = Array.isArray(restaurant.cuisine)
+        ? restaurant.cuisine
+        : []
+
+      const matchesCuisine =
+        selectedCuisine === 'All' ||
+        restaurantCuisines.some(
+          (cuisine) =>
+            String(cuisine).toLowerCase() ===
+            selectedCuisine.toLowerCase()
+        )
+
+      const matchesRating =
+        ratingFilter === 'all' ||
+        Number(restaurant.rating || 0) >= Number(ratingFilter)
+
+      const deliveryMinutes = getMinimumDeliveryTime(
+        restaurant.deliveryTime
+      )
+
+      const matchesDelivery =
+        deliveryFilter === 'all' ||
+        (deliveryFilter === 'fast' && deliveryMinutes <= 30) ||
+        (deliveryFilter === 'under45' && deliveryMinutes <= 45)
+
+      const price = Number(restaurant.priceForTwo || 0)
+
+      const matchesPrice =
+        priceFilter === 'all' ||
+        (priceFilter === 'under400' && price < 400) ||
+        (priceFilter === '400to600' &&
+          price >= 400 &&
+          price <= 600) ||
+        (priceFilter === 'above600' && price > 600)
+
+      const matchesOffer =
+        !offerOnly || Boolean(restaurant.offer)
+
+      return (
+        matchesSearch &&
+        matchesCuisine &&
+        matchesRating &&
+        matchesDelivery &&
+        matchesPrice &&
+        matchesOffer &&
+        restaurant.isOpen !== false
+      )
+    })
+
+    if (sortBy === 'rating') {
+      result.sort(
+        (a, b) =>
+          Number(b.rating || 0) -
+          Number(a.rating || 0)
+      )
+    }
+
+    if (sortBy === 'delivery') {
+      result.sort(
+        (a, b) =>
+          getMinimumDeliveryTime(a.deliveryTime) -
+          getMinimumDeliveryTime(b.deliveryTime)
+      )
+    }
+
+    if (sortBy === 'price-low') {
+      result.sort(
+        (a, b) =>
+          Number(a.priceForTwo || 0) -
+          Number(b.priceForTwo || 0)
+      )
+    }
+
+    if (sortBy === 'price-high') {
+      result.sort(
+        (a, b) =>
+          Number(b.priceForTwo || 0) -
+          Number(a.priceForTwo || 0)
+      )
+    }
+
+    return result
+  }, [
+    restaurants,
+    search,
+    selectedCuisine,
+    ratingFilter,
+    deliveryFilter,
+    priceFilter,
+    offerOnly,
+    sortBy,
+  ])
+
+  const popularRestaurants = useMemo(
+    () =>
+      [...restaurants]
+        .filter((restaurant) => restaurant.isOpen !== false)
+        .sort(
+          (first, second) =>
+            Number(second.rating || 0) -
+            Number(first.rating || 0)
+        ),
+    [restaurants]
+  )
+
+  const cartCount = cart.reduce(
+    (sum, item) => sum + Number(item.qty || 0),
+    0
+  )
+
+  const subtotal = cart.reduce(
+    (sum, item) =>
+      sum + Number(item.price || 0) * Number(item.qty || 0),
+    0
+  )
+
+  const delivery =
+    subtotal > 499 || appliedCoupon ? 0 : 40
+
   const taxes = Math.round(subtotal * 0.05)
-  const discount = appliedCoupon ? (coupon.toUpperCase() === 'FIRSTBITE' ? 100 : 50) : 0
+
+  const discount = appliedCoupon
+    ? coupon.toUpperCase() === 'FIRSTBITE'
+      ? 100
+      : 50
+    : 0
+
   const total = subtotal + delivery + taxes - discount
-  const addToCart = (food) => setCart((current) => {
-    const found = current.find((item) => item.id === food.id)
-    return found ? current.map((item) => item.id === food.id ? { ...item, qty: item.qty + 1 } : item) : [...current, { ...food, qty: 1 }]
-  })
-  const toggleWishlist = (id) => setWishlist((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id])
-  const updateQuantity = (id, change) => setCart((current) => current.flatMap((item) => item.id === id ? (item.qty + change > 0 ? [{ ...item, qty: item.qty + change }] : []) : [item]))
-  const openRestaurant = (restaurant) => { setActiveRestaurant(restaurant); setActiveView('Restaurant') }
-  const goToMenu = (cuisine = 'All') => { setSelectedCuisine(cuisine); setActiveView('Menu') }
-  const navigate = (view) => { setActiveView(view); setMobileMenuOpen(false) }
-  const detectLocation = () => {
-    if (!navigator.geolocation) { setLocation('Bengaluru'); return }
-    navigator.geolocation.getCurrentPosition(() => setLocation('Near you, Bengaluru'), () => setLocation('Bengaluru'))
+
+  const addToCart = (food) =>
+    setCart((current) => {
+      const found = current.find(
+        (item) => item.id === food.id
+      )
+
+      return found
+        ? current.map((item) =>
+            item.id === food.id
+              ? { ...item, qty: item.qty + 1 }
+              : item
+          )
+        : [...current, { ...food, qty: 1 }]
+    })
+
+  const toggleWishlist = (id) =>
+    setWishlist((current) =>
+      current.includes(id)
+        ? current.filter((item) => item !== id)
+        : [...current, id]
+    )
+
+  const updateQuantity = (id, change) =>
+    setCart((current) =>
+      current.flatMap((item) =>
+        item.id === id
+          ? item.qty + change > 0
+            ? [{ ...item, qty: item.qty + change }]
+            : []
+          : [item]
+      )
+    )
+
+  const openRestaurant = (restaurant) => {
+    if (!restaurant) return
+
+    setActiveRestaurant(restaurant)
+    setActiveView('Restaurant')
   }
+
+  const goToMenu = (cuisine = 'All') => {
+    setSelectedCuisine(cuisine)
+    setActiveView('Menu')
+  }
+
+  const navigate = (view) => {
+    setActiveView(view)
+    setMobileMenuOpen(false)
+  }
+
+  const clearFilters = () => {
+    setSearch('')
+    setSelectedCuisine('All')
+    setDietaryFilter('all')
+    setRatingFilter('all')
+    setDeliveryFilter('all')
+    setPriceFilter('all')
+    setOfferOnly(false)
+    setSortBy('relevance')
+  }
+
   const placeOrder = async () => {
-    if (!cart.length || !newAddress.trim() || !phone.trim()) { setCheckoutError('Add a delivery address and contact number to continue.'); return }
+    if (
+      !cart.length ||
+      !newAddress.trim() ||
+      !phone.trim()
+    ) {
+      setCheckoutError(
+        'Add a delivery address and contact number to continue.'
+      )
+      return
+    }
+
     setCheckoutError('')
+
     if (token) {
       try {
-        const response = await fetch('/api/orders', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify({ items: cart.map((item) => ({ foodId: item.id, quantity: item.qty })), deliveryAddress: { street: newAddress.trim(), city: 'Bengaluru' }, notes: `${phone.trim()}${deliveryInstructions ? ` · ${deliveryInstructions}` : ''}`, paymentMethod: paymentMethod === 'cash' ? 'cash' : 'razorpay' }) })
-        if (!response.ok) throw new Error('Order request failed')
+        const response = await fetch('/api/orders', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            items: cart.map((item) => ({
+              foodId: item.id,
+              quantity: item.qty,
+            })),
+            deliveryAddress: {
+              street: newAddress.trim(),
+              city: 'Bengaluru',
+            },
+            notes: `${phone.trim()}${
+              deliveryInstructions
+                ? ` · ${deliveryInstructions}`
+                : ''
+            }`,
+            paymentMethod:
+              paymentMethod === 'cash'
+                ? 'cash'
+                : 'razorpay',
+          }),
+        })
+
+        if (!response.ok) {
+          throw new Error('Order request failed')
+        }
+
         const order = await response.json()
-        setOrderNumber(order._id ? `MRS${order._id.slice(-6).toUpperCase()}` : 'MRS10245')
-      } catch (error) { console.error(error) }
+
+        setOrderNumber(
+          order._id
+            ? `MRS${order._id.slice(-6).toUpperCase()}`
+            : 'MRS10245'
+        )
+      } catch (error) {
+        console.error(error)
+      }
     }
+
     setOrderPlaced(true)
     setCart([])
   }
@@ -99,95 +602,2384 @@ function App() {
   return (
     <div className="app-shell">
       <header className="topbar">
-        <button className="brand" onClick={() => navigate('Home')}><span className="brand-mark">+</span><span>morsel<span className="brand-dot">.</span></span></button>
-        <nav className="nav-links" aria-label="Main navigation">{['Home', 'Menu', 'Orders', 'Admin'].map((item) => <button key={item} className={activeView === item ? 'active' : ''} onClick={() => navigate(item)}>{item}</button>)}</nav>
-        <div className="top-actions"><button className="icon-button" aria-label="Wishlist" onClick={() => navigate('Wishlist')}>♡<span>{wishlist.length}</span></button><button className="cart-button" onClick={() => navigate('Cart')}>Bag <b>{cartCount}</b></button><button className="avatar" onClick={() => navigate(user ? 'Profile' : 'Login')}>{user?.initials || 'AR'}</button><button className="menu-toggle" aria-label="Open navigation menu" aria-expanded={mobileMenuOpen} onClick={() => setMobileMenuOpen((open) => !open)}>☰</button></div>
+        <button
+          className="brand"
+          onClick={() => navigate('Home')}
+        >
+          <span className="brand-mark">+</span>
+          <span>
+            morsel<span className="brand-dot">.</span>
+          </span>
+        </button>
+
+        <nav
+          className="nav-links"
+          aria-label="Main navigation"
+        >
+          {['Home', 'Menu', 'Orders', 'Admin'].map(
+            (item) => (
+              <button
+                key={item}
+                className={
+                  activeView === item ? 'active' : ''
+                }
+                onClick={() => navigate(item)}
+              >
+                {item}
+              </button>
+            )
+          )}
+        </nav>
+
+        <div className="top-actions">
+          <button
+            className="icon-button"
+            aria-label="Wishlist"
+            onClick={() => navigate('Wishlist')}
+          >
+            ♡
+            <span>{wishlist.length}</span>
+          </button>
+
+          <button
+            className="cart-button"
+            onClick={() => navigate('Cart')}
+          >
+            Bag <b>{cartCount}</b>
+          </button>
+
+          <button
+            className="avatar"
+            onClick={() =>
+              navigate(user ? 'Profile' : 'Login')
+            }
+          >
+            {user?.initials || 'AR'}
+          </button>
+
+          <button
+            className="menu-toggle"
+            aria-label="Open navigation menu"
+            aria-expanded={mobileMenuOpen}
+            onClick={() =>
+              setMobileMenuOpen((open) => !open)
+            }
+          >
+            ☰
+          </button>
+        </div>
       </header>
-      <button className="location-picker" onClick={detectLocation}><span className="pin">⌖</span><span><small>DELIVERING TO</small>{location}</span><b>⌄</b></button>
-      {mobileMenuOpen && <nav className="mobile-menu" aria-label="Mobile navigation">{['Home', 'Menu', 'Orders', 'Wishlist', 'Admin'].map((item) => <button key={item} className={activeView === item ? 'active' : ''} onClick={() => navigate(item)}>{item}</button>)}<button onClick={() => navigate(user ? 'Profile' : 'Login')}>{user ? 'Profile' : 'Sign in'}</button></nav>}
 
-      {activeView === 'Home' && <main>
-        <section className="welcome-row"><div className="hero-copy"><span className="hero-pill">DELIVERED TO YOUR DOOR</span><h1>Cravings, meet<br /><em>their match.</em></h1><p className="welcome-copy">The best restaurants in Bengaluru, brought to you while it is still hot.</p></div><div className="hero-art"><img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1100&q=85" alt="A table filled with food" /><div className="hero-rating"><span>★</span><div><b>4.9</b><small>loved by foodies</small></div></div></div></section>
-        <section className="search-hero"><div className="search-wrap home-search"><span>⌕</span><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search for dishes, restaurants or cuisines" /><button className="search-submit" onClick={() => navigate('Menu')}>Search</button></div><div className="trending"><span>Popular:</span>{['Biryani', 'Pizza', 'Burgers', 'Momos'].map((item) => <button key={item} onClick={() => { setSearch(item); navigate('Menu') }}>{item}</button>)}</div></section>
-        <section className="section-block category-section"><div className="section-heading"><div><p className="kicker">BROWSE BY CATEGORY</p><h2>What are you craving?</h2></div><button className="text-button" onClick={() => goToMenu()}>See all <span>↗</span></button></div><div className="cuisine-row">{cuisines.slice(1).map((item, index) => <button key={item} className={`cuisine-card cuisine-${index}`} onClick={() => goToMenu(item)}><span className="cuisine-art">{['🍛', '🍕', '🍔', '🍜', '🥗', '🍰'][index]}</span><b>{item}</b><small>Explore now</small></button>)}</div></section>
-        <section className="section-block"><div className="section-heading"><div><p className="kicker">POPULAR NEAR YOU</p><h2>Top restaurants near you</h2></div><button className="text-button" onClick={() => goToMenu()}>View all <span>↗</span></button></div><div className="restaurant-grid">{popularRestaurants.slice(0, 4).map((restaurant) => <RestaurantCard key={restaurant.id} restaurant={restaurant} onOpen={openRestaurant} />)}</div></section>
-        <section className="section-block"><div className="section-heading"><div><p className="kicker">QUICK BITES</p><h2>Popular dishes</h2></div><div className="dietary-tabs">{[['all', 'All'], ['veg', 'Veg'], ['nonveg', 'Non-veg']].map(([value, label]) => <button key={value} className={dietaryFilter === value ? 'selected' : ''} onClick={() => setDietaryFilter(value)}>{label}</button>)}</div></div><div className="food-grid">{filteredFoods.slice(0, 3).map((food) => <FoodCard key={food.id} food={food} wished={wishlist.includes(food.id)} onWish={toggleWishlist} onAdd={addToCart} onOpen={() => openRestaurant(restaurants.find((restaurant) => restaurant.id === food.restaurantId) || demoRestaurants.find((restaurant) => restaurant.name === food.restaurant))} />)}</div></section>
-        <section className="promo-strip"><div><p className="kicker">WEEKEND SPECIAL</p><h2>₹100 off your next order</h2><p>Use code <b>FIRSTBITE</b> on orders above ₹499</p></div><button onClick={() => { setCoupon('FIRSTBITE'); setActiveView('Cart') }}>Claim offer <span>→</span></button></section>
-      </main>}
+      <button
+        className="location-picker"
+        onClick={() =>
+          setLocation(
+            location === 'Indiranagar, Bengaluru'
+              ? 'Koramangala, Bengaluru'
+              : 'Indiranagar, Bengaluru'
+          )
+        }
+      >
+        <span className="pin">⌖</span>
 
-      {activeView === 'Restaurant' && activeRestaurant && <main className="content-page restaurant-page"><button className="back-button" onClick={() => navigate('Home')}>← Back to restaurants</button><section className="restaurant-hero"><img src={activeRestaurant.image} alt="" /><div><p className="kicker">{activeRestaurant.cuisine.join(' · ').toUpperCase()}</p><h1>{activeRestaurant.name}</h1><p>{activeRestaurant.description}</p><div className="restaurant-meta"><span>★ {activeRestaurant.rating} <small>({activeRestaurant.reviews})</small></span><span>• {activeRestaurant.deliveryTime}</span><span>• ₹{activeRestaurant.priceForTwo} for two</span></div><strong className="offer-label">🏷️ {activeRestaurant.offer}</strong></div></section><div className="restaurant-menu-heading"><div><p className="kicker">{restaurantFoods.length || 3} ITEMS</p><h2>Popular</h2></div><button className="text-button" onClick={() => navigate('Cart')}>View bag · {cartCount}</button></div><div className="restaurant-food-list">{(restaurantFoods.length ? restaurantFoods : foods.filter((food) => food.restaurant === activeRestaurant.name)).map((food) => <FoodCard key={food.id} food={food} wished={wishlist.includes(food.id)} onWish={toggleWishlist} onAdd={addToCart} detailed />)}</div></main>}
-      {activeView === 'Menu' && <main className="content-page"><div className="page-title"><div><p className="kicker">RESTAURANTS & DISHES</p><h1>Find your next favourite.</h1></div><div className="filter-note">{filteredFoods.length} dishes · <span>Sorted by relevance</span></div></div><div className="menu-toolbar"><div className="search-wrap compact"><span>⌕</span><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search restaurants, dishes or cuisines" /></div><div className="filter-row">{cuisines.map((item) => <button key={item} className={selectedCuisine === item ? 'selected' : ''} onClick={() => setSelectedCuisine(item)}>{item}</button>)}</div><div className="dietary-tabs">{[['all', 'All'], ['veg', 'Veg'], ['nonveg', 'Non-veg']].map(([value, label]) => <button key={value} className={dietaryFilter === value ? 'selected' : ''} onClick={() => setDietaryFilter(value)}>{label}</button>)}</div></div><div className="restaurant-grid menu-restaurants">{popularRestaurants.filter((restaurant) => `${restaurant.name} ${restaurant.cuisine.join(' ')}`.toLowerCase().includes(search.toLowerCase())).map((restaurant) => <RestaurantCard key={restaurant.id} restaurant={restaurant} onOpen={openRestaurant} />)}</div><div className="menu-layout"><div className="food-grid menu-grid">{filteredFoods.map((food) => <FoodCard key={food.id} food={food} wished={wishlist.includes(food.id)} onWish={toggleWishlist} onAdd={addToCart} onOpen={() => openRestaurant(restaurants.find((restaurant) => restaurant.id === food.restaurantId) || demoRestaurants.find((restaurant) => restaurant.name === food.restaurant))} />)}</div><aside className="order-aside"><p className="kicker">YOUR ORDER</p><h3>{cartCount ? `${cartCount} items in your bag` : 'Your bag is waiting'}</h3>{cart.slice(0, 2).map((item) => <div className="mini-order" key={item.id}><span>{item.name}</span><b>₹{item.price * item.qty}</b></div>)}<button className="primary-button full" onClick={() => navigate('Cart')}>{cartCount ? `View bag · ₹${subtotal}` : 'Start an order'} <span>→</span></button></aside></div></main>}
-      {activeView === 'Wishlist' && <main className="content-page"><div className="page-title"><div><p className="kicker">SAVED FOR LATER</p><h1>Your wishlist.</h1></div></div><div className="food-grid menu-grid">{foods.filter((food) => wishlist.includes(food.id)).map((food) => <FoodCard key={food.id} food={food} wished onWish={toggleWishlist} onAdd={addToCart} />)}</div></main>}
-      {activeView === 'Cart' && <main className="content-page"><div className="page-title"><div><p className="kicker">YOUR BAG · CHECKOUT</p><h1>Make it yours.</h1></div><span className="secure-note">⌁ Secure checkout</span></div>{orderPlaced ? <Tracking orderNumber={orderNumber} /> : <div className="checkout-layout"><div className="cart-list"><section className="checkout-card"><div className="checkout-heading"><div><p className="kicker">DELIVERY DETAILS</p><h2>Where should we bring it?</h2></div></div><input value={newAddress} onChange={(event) => setNewAddress(event.target.value)} placeholder="Delivery address, landmark or area" /><input value={phone} onChange={(event) => setPhone(event.target.value)} placeholder="Contact number" type="tel" /><textarea value={deliveryInstructions} onChange={(event) => setDeliveryInstructions(event.target.value)} placeholder="Delivery instructions (optional)" rows="3" /></section><section className="checkout-card"><div className="checkout-heading"><div><p className="kicker">YOUR ITEMS</p><h2>{cartCount ? `${cartCount} items in your bag` : 'Your bag is waiting'}</h2></div></div>{cart.length ? cart.map((item) => <div className="cart-line" key={item.id}><img src={item.image} alt="" /><div><h3>{item.name}</h3><p>{item.restaurant} · {item.isVeg === false ? 'Non-veg' : 'Veg'}</p><div className="quantity-control"><button onClick={() => updateQuantity(item.id, -1)}>-</button><b>{item.qty}</b><button onClick={() => updateQuantity(item.id, 1)}>+</button></div></div><strong>₹{item.price * item.qty}</strong><button className="remove-item" onClick={() => updateQuantity(item.id, -item.qty)} aria-label={`Remove ${item.name}`}>×</button></div>) : <div className="empty-state"><span>＋</span><h2>Your bag is empty</h2><p>Something delicious is only a few clicks away.</p><button className="primary-button" onClick={() => navigate('Menu')}>Browse menu</button></div>}</section></div><aside className="summary-card"><p className="kicker">PAYMENT</p><div className="payment-options">{[['upi', 'UPI'], ['card', 'Card'], ['netbanking', 'Net banking'], ['cash', 'Cash on delivery']].map(([value, label]) => <button key={value} className={paymentMethod === value ? 'selected' : ''} onClick={() => setPaymentMethod(value)}>{label}</button>)}</div><div className="coupon-input"><input value={coupon} onChange={(event) => setCoupon(event.target.value)} placeholder="Have a coupon?" /><button onClick={() => coupon && setAppliedCoupon(true)}>Apply</button></div><div className="summary-row"><span>Item total</span><b>₹{subtotal}</b></div><div className="summary-row"><span>Delivery fee</span><b className={delivery === 0 ? 'green-text' : ''}>{delivery ? `₹${delivery}` : 'FREE'}</b></div><div className="summary-row"><span>Taxes</span><b>₹{taxes}</b></div>{appliedCoupon && <div className="summary-row green-text"><span>Discount</span><b>-₹{discount}</b></div>}<div className="summary-total"><span>Total</span><b>₹{Math.max(total, 0)}</b></div>{checkoutError && <p className="checkout-error">{checkoutError}</p>}<button disabled={!cart.length} className="primary-button full" onClick={placeOrder}>Proceed to checkout <span>→</span></button><small className="payment-note">Secure payment processing. Online payments can be connected to Razorpay or Stripe.</small></aside></div>}</main>}
-      {activeView === 'Orders' && <main className="content-page"><div className="page-title"><div><p className="kicker">YOUR ORDERS</p><h1>Follow the flavour.</h1></div></div><Tracking past /></main>}
-      {activeView === 'Admin' && <AdminDashboard token={token} />}
-      {activeView === 'Login' && <AuthView mode={authMode} setMode={setAuthMode} onSubmit={(account, accountToken) => { setUser({ ...account, initials: account.name.split(' ').map((part) => part[0]).join('').slice(0, 2).toUpperCase() }); setToken(accountToken); localStorage.setItem('food-delivery-token', accountToken); setActiveView('Profile') }} />}
-      {activeView === 'Profile' && <AccountView user={user} addresses={addresses} newAddress={newAddress} setNewAddress={setNewAddress} onAddAddress={() => { if (newAddress.trim()) { setAddresses((current) => [...current, { id: Date.now(), label: current.length ? 'Other' : 'Home', text: newAddress.trim() }]); setNewAddress('') } }} onRemoveAddress={(id) => setAddresses((current) => current.filter((address) => address.id !== id))} onLogout={() => { setUser(null); setActiveView('Login') }} onNavigate={setActiveView} />}
-      {cartCount > 0 && activeView !== 'Cart' && <button className="mobile-cart-fab" onClick={() => navigate('Cart')}><span>Bag</span><b>{cartCount} · ₹{subtotal}</b><span>→</span></button>}
-      <nav className="bottom-nav" aria-label="Mobile navigation"><button className={activeView === 'Home' ? 'active' : ''} onClick={() => navigate('Home')}><span>⌂</span>Home</button><button className={activeView === 'Menu' ? 'active' : ''} onClick={() => navigate('Menu')}><span>⌕</span>Menu</button><button className={activeView === 'Orders' ? 'active' : ''} onClick={() => navigate('Orders')}><span>◷</span>Orders</button><button className={activeView === 'Cart' ? 'active' : ''} onClick={() => navigate('Cart')}><span>▱</span>Bag</button></nav>
+        <span>
+          <small>DELIVERING TO</small>
+          {location}
+        </span>
+
+        <b>⌄</b>
+      </button>
+
+      {mobileMenuOpen && (
+        <nav
+          className="mobile-menu"
+          aria-label="Mobile navigation"
+        >
+          {[
+            'Home',
+            'Menu',
+            'Orders',
+            'Wishlist',
+            'Admin',
+          ].map((item) => (
+            <button
+              key={item}
+              className={
+                activeView === item ? 'active' : ''
+              }
+              onClick={() => navigate(item)}
+            >
+              {item}
+            </button>
+          ))}
+
+          <button
+            onClick={() =>
+              navigate(user ? 'Profile' : 'Login')
+            }
+          >
+            {user ? 'Profile' : 'Sign in'}
+          </button>
+        </nav>
+      )}
+
+      {activeView === 'Home' && (
+        <main>
+          <section className="welcome-row">
+            <div>
+              <p className="kicker">
+                THURSDAY, 12 SEPTEMBER
+              </p>
+
+              <h1>
+                Good food, <em>good mood.</em>
+              </h1>
+
+              <p className="welcome-copy">
+                Curated comfort food from the best kitchens
+                around you.
+              </p>
+            </div>
+
+            <div className="weather-note">
+              <span>☀</span>
+
+              <div>
+                <b>28°C</b>
+                <small>Perfect for a biryani</small>
+              </div>
+            </div>
+          </section>
+
+          <section className="search-hero">
+            <div className="search-wrap">
+              <span>⌕</span>
+
+              <input
+                value={search}
+                onChange={(event) =>
+                  setSearch(event.target.value)
+                }
+                onFocus={() => setActiveView('Menu')}
+                placeholder="Search dishes, restaurants or cuisines"
+              />
+
+              <kbd>⌘ K</kbd>
+            </div>
+
+            <div className="trending">
+              <span>Trending:</span>
+
+              {[
+                'Biryani',
+                'Pizza',
+                'Burgers',
+                'Momos',
+              ].map((item) => (
+                <button
+                  key={item}
+                  onClick={() => {
+                    setSearch(item)
+                    setActiveView('Menu')
+                  }}
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+          </section>
+
+          <section className="section-block">
+            <div className="section-heading">
+              <div>
+                <p className="kicker">
+                  EXPLORE BY MOOD
+                </p>
+
+                <h2>What are you craving?</h2>
+              </div>
+
+              <button
+                className="text-button"
+                onClick={() => goToMenu()}
+              >
+                See all <span>↗</span>
+              </button>
+            </div>
+
+            <div className="cuisine-row">
+              {cuisines.slice(1).map(
+                (item, index) => (
+                  <button
+                    key={item}
+                    className={`cuisine-card cuisine-${index}`}
+                    onClick={() => goToMenu(item)}
+                  >
+                    <span className="cuisine-art">
+                      {[
+                        '◒',
+                        '✦',
+                        '●',
+                        '≋',
+                        '✺',
+                        '◌',
+                      ][index]}
+                    </span>
+
+                    <b>{item}</b>
+
+                    <small>
+                      {
+                        [42, 36, 28, 24, 31, 18][
+                          index
+                        ]
+                      }{' '}
+                      places
+                    </small>
+                  </button>
+                )
+              )}
+            </div>
+          </section>
+
+          <section className="section-block">
+            <div className="section-heading">
+              <div>
+                <p className="kicker">
+                  POPULAR NEAR YOU
+                </p>
+
+                <h2>Top restaurants near you</h2>
+              </div>
+
+              <button
+                className="text-button"
+                onClick={() => goToMenu()}
+              >
+                View all <span>↗</span>
+              </button>
+            </div>
+
+            <div className="restaurant-grid">
+              {popularRestaurants
+                .slice(0, 4)
+                .map((restaurant) => (
+                  <RestaurantCard
+                    key={restaurant.id}
+                    restaurant={restaurant}
+                    onOpen={openRestaurant}
+                    wished={false}
+                    onWish={() => {}}
+                  />
+                ))}
+            </div>
+          </section>
+
+          <section className="section-block">
+            <div className="section-heading">
+              <div>
+                <p className="kicker">
+                  QUICK BITES
+                </p>
+
+                <h2>Popular dishes</h2>
+              </div>
+
+              <div className="dietary-tabs">
+                {[
+                  ['all', 'All'],
+                  ['veg', 'Veg'],
+                  ['nonveg', 'Non-veg'],
+                ].map(([value, label]) => (
+                  <button
+                    key={value}
+                    className={
+                      dietaryFilter === value
+                        ? 'selected'
+                        : ''
+                    }
+                    onClick={() =>
+                      setDietaryFilter(value)
+                    }
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="food-grid">
+              {filteredFoods.slice(0, 3).map(
+                (food) => (
+                  <FoodCard
+                    key={food.id}
+                    food={food}
+                    wished={wishlist.includes(food.id)}
+                    onWish={toggleWishlist}
+                    onAdd={addToCart}
+                    onOpen={() =>
+                      openRestaurant(
+                        restaurants.find(
+                          (restaurant) =>
+                            restaurant.id ===
+                            food.restaurantId
+                        ) ||
+                          demoRestaurants.find(
+                            (restaurant) =>
+                              restaurant.name ===
+                              food.restaurant
+                          )
+                      )
+                    }
+                  />
+                )
+              )}
+            </div>
+          </section>
+
+          <section className="promo-strip">
+            <div>
+              <p className="kicker">
+                WEEKEND SPECIAL
+              </p>
+
+              <h2>₹100 off your next order</h2>
+
+              <p>
+                Use code <b>FIRSTBITE</b> on orders
+                above ₹499
+              </p>
+            </div>
+
+            <button
+              onClick={() => {
+                setCoupon('FIRSTBITE')
+                setActiveView('Cart')
+              }}
+            >
+              Claim offer <span>→</span>
+            </button>
+          </section>
+        </main>
+      )}
+
+      {activeView === 'Restaurant' &&
+        activeRestaurant && (
+          <main className="content-page restaurant-page">
+            <button
+              className="back-button"
+              onClick={() => navigate('Home')}
+            >
+              ← Back to restaurants
+            </button>
+
+            <section className="restaurant-hero">
+              <img
+                src={activeRestaurant.image}
+                alt=""
+              />
+
+              <div>
+                <p className="kicker">
+                  {(
+                    activeRestaurant.cuisine || []
+                  )
+                    .join(' · ')
+                    .toUpperCase()}
+                </p>
+
+                <h1>{activeRestaurant.name}</h1>
+
+                <p>
+                  {activeRestaurant.description}
+                </p>
+
+                <div className="restaurant-meta">
+                  <span>
+                    ★ {activeRestaurant.rating}{' '}
+                    <small>
+                      ({activeRestaurant.reviews})
+                    </small>
+                  </span>
+
+                  <span>
+                    • {activeRestaurant.deliveryTime}
+                  </span>
+
+                  <span>
+                    • ₹
+                    {activeRestaurant.priceForTwo}{' '}
+                    for two
+                  </span>
+                </div>
+
+                <strong className="offer-label">
+                  🏷️ {activeRestaurant.offer}
+                </strong>
+              </div>
+            </section>
+
+            <div className="restaurant-menu-heading">
+              <div>
+                <p className="kicker">
+                  {restaurantFoods.length || 3} ITEMS
+                </p>
+
+                <h2>Popular</h2>
+              </div>
+
+              <button
+                className="text-button"
+                onClick={() => navigate('Cart')}
+              >
+                View bag · {cartCount}
+              </button>
+            </div>
+
+            <div className="restaurant-food-list">
+              {(restaurantFoods.length
+                ? restaurantFoods
+                : foods.filter(
+                    (food) =>
+                      food.restaurant ===
+                      activeRestaurant.name
+                  )
+              ).map((food) => (
+                <FoodCard
+                  key={food.id}
+                  food={food}
+                  wished={wishlist.includes(food.id)}
+                  onWish={toggleWishlist}
+                  onAdd={addToCart}
+                  detailed
+                />
+              ))}
+            </div>
+          </main>
+        )}
+
+      {activeView === 'Menu' && (
+        <main className="content-page">
+          <div className="page-title">
+            <div>
+              <p className="kicker">
+                RESTAURANTS & DISHES
+              </p>
+
+              <h1>Find your next favourite.</h1>
+            </div>
+
+            <div className="filter-note">
+              {filteredRestaurants.length} restaurants
+            </div>
+          </div>
+
+          <div className="menu-toolbar">
+            <div className="search-wrap compact">
+              <span>⌕</span>
+
+              <input
+                value={search}
+                onChange={(event) =>
+                  setSearch(event.target.value)
+                }
+                placeholder="Search restaurants, dishes or cuisines"
+              />
+
+              {search && (
+                <button
+                  type="button"
+                  onClick={() => setSearch('')}
+                  aria-label="Clear search"
+                >
+                  ×
+                </button>
+              )}
+            </div>
+
+            <div className="filter-row">
+              {cuisines.map((item) => (
+                <button
+                  key={item}
+                  className={
+                    selectedCuisine === item
+                      ? 'selected'
+                      : ''
+                  }
+                  onClick={() =>
+                    setSelectedCuisine(item)
+                  }
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+
+            <div className="advanced-filters">
+              <select
+                value={ratingFilter}
+                onChange={(event) =>
+                  setRatingFilter(event.target.value)
+                }
+              >
+                <option value="all">
+                  ⭐ Rating
+                </option>
+                <option value="4.5">
+                  4.5+
+                </option>
+                <option value="4">
+                  4+
+                </option>
+                <option value="3.5">
+                  3.5+
+                </option>
+              </select>
+
+              <select
+                value={deliveryFilter}
+                onChange={(event) =>
+                  setDeliveryFilter(event.target.value)
+                }
+              >
+                <option value="all">
+                  🕐 Delivery time
+                </option>
+                <option value="fast">
+                  Under 30 min
+                </option>
+                <option value="under45">
+                  Under 45 min
+                </option>
+              </select>
+
+              <select
+                value={priceFilter}
+                onChange={(event) =>
+                  setPriceFilter(event.target.value)
+                }
+              >
+                <option value="all">
+                  ₹ Price
+                </option>
+                <option value="under400">
+                  Under ₹400
+                </option>
+                <option value="400to600">
+                  ₹400–₹600
+                </option>
+                <option value="above600">
+                  ₹600+
+                </option>
+              </select>
+
+              <button
+                className={`offer-filter ${
+                  offerOnly ? 'selected' : ''
+                }`}
+                onClick={() =>
+                  setOfferOnly(
+                    (current) => !current
+                  )
+                }
+              >
+                🏷️ Offers
+              </button>
+            </div>
+
+            <div className="dietary-tabs">
+              {[
+                ['all', 'All'],
+                ['veg', 'Veg'],
+                ['nonveg', 'Non-veg'],
+              ].map(([value, label]) => (
+                <button
+                  key={value}
+                  className={
+                    dietaryFilter === value
+                      ? 'selected'
+                      : ''
+                  }
+                  onClick={() =>
+                    setDietaryFilter(value)
+                  }
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="discovery-bottom">
+            <p>
+              {filteredRestaurants.length}{' '}
+              restaurants found
+            </p>
+
+            <div className="sort-controls">
+              <select
+                value={sortBy}
+                onChange={(event) =>
+                  setSortBy(event.target.value)
+                }
+              >
+                <option value="relevance">
+                  Sort: Relevance
+                </option>
+
+                <option value="rating">
+                  Rating
+                </option>
+
+                <option value="delivery">
+                  Delivery time
+                </option>
+
+                <option value="price-low">
+                  Price: Low to high
+                </option>
+
+                <option value="price-high">
+                  Price: High to low
+                </option>
+              </select>
+
+              <button
+                className="clear-filter-button"
+                onClick={clearFilters}
+              >
+                Clear filters
+              </button>
+            </div>
+          </div>
+
+          {filteredRestaurants.length === 0 ? (
+            <div className="empty-results">
+              <div>⌕</div>
+
+              <h2>No restaurants found</h2>
+
+              <p>
+                Try changing your search or filters.
+              </p>
+
+              <button
+                className="primary-button"
+                onClick={clearFilters}
+              >
+                Clear filters
+              </button>
+            </div>
+          ) : (
+            <div className="restaurant-grid menu-restaurants">
+              {filteredRestaurants.map(
+                (restaurant) => (
+                  <RestaurantCard
+                    key={restaurant.id}
+                    restaurant={restaurant}
+                    onOpen={openRestaurant}
+                    wished={false}
+                    onWish={() => {}}
+                  />
+                )
+              )}
+            </div>
+          )}
+
+          <div className="menu-layout">
+            <div className="food-grid menu-grid">
+              {filteredFoods.map((food) => (
+                <FoodCard
+                  key={food.id}
+                  food={food}
+                  wished={wishlist.includes(food.id)}
+                  onWish={toggleWishlist}
+                  onAdd={addToCart}
+                  onOpen={() =>
+                    openRestaurant(
+                      restaurants.find(
+                        (restaurant) =>
+                          restaurant.id ===
+                          food.restaurantId
+                      ) ||
+                        demoRestaurants.find(
+                          (restaurant) =>
+                            restaurant.name ===
+                            food.restaurant
+                        )
+                    )
+                  }
+                />
+              ))}
+            </div>
+
+            <aside className="order-aside">
+              <p className="kicker">
+                YOUR ORDER
+              </p>
+
+              <h3>
+                {cartCount
+                  ? `${cartCount} items in your bag`
+                  : 'Your bag is waiting'}
+              </h3>
+
+              {cart.slice(0, 2).map((item) => (
+                <div
+                  className="mini-order"
+                  key={item.id}
+                >
+                  <span>{item.name}</span>
+                  <b>
+                    ₹{item.price * item.qty}
+                  </b>
+                </div>
+              ))}
+
+              <button
+                className="primary-button full"
+                onClick={() => navigate('Cart')}
+              >
+                {cartCount
+                  ? `View bag · ₹${subtotal}`
+                  : 'Start an order'}
+
+                <span>→</span>
+              </button>
+            </aside>
+          </div>
+        </main>
+      )}
+
+      {activeView === 'Wishlist' && (
+        <main className="content-page">
+          <div className="page-title">
+            <div>
+              <p className="kicker">
+                SAVED FOR LATER
+              </p>
+
+              <h1>Your wishlist.</h1>
+            </div>
+          </div>
+
+          <div className="food-grid menu-grid">
+            {foods
+              .filter((food) =>
+                wishlist.includes(food.id)
+              )
+              .map((food) => (
+                <FoodCard
+                  key={food.id}
+                  food={food}
+                  wished
+                  onWish={toggleWishlist}
+                  onAdd={addToCart}
+                />
+              ))}
+          </div>
+        </main>
+      )}
+
+      {activeView === 'Cart' && (
+        <main className="content-page">
+          <div className="page-title">
+            <div>
+              <p className="kicker">
+                YOUR BAG · CHECKOUT
+              </p>
+
+              <h1>Make it yours.</h1>
+            </div>
+
+            <span className="secure-note">
+              ⌁ Secure checkout
+            </span>
+          </div>
+
+          {orderPlaced ? (
+            <Tracking
+              orderNumber={orderNumber}
+            />
+          ) : (
+            <div className="checkout-layout">
+              <div className="cart-list">
+                <section className="checkout-card">
+                  <div className="checkout-heading">
+                    <div>
+                      <p className="kicker">
+                        DELIVERY DETAILS
+                      </p>
+
+                      <h2>
+                        Where should we bring it?
+                      </h2>
+                    </div>
+                  </div>
+
+                  <input
+                    value={newAddress}
+                    onChange={(event) =>
+                      setNewAddress(event.target.value)
+                    }
+                    placeholder="Delivery address, landmark or area"
+                  />
+
+                  <input
+                    value={phone}
+                    onChange={(event) =>
+                      setPhone(event.target.value)
+                    }
+                    placeholder="Contact number"
+                    type="tel"
+                  />
+
+                  <textarea
+                    value={deliveryInstructions}
+                    onChange={(event) =>
+                      setDeliveryInstructions(
+                        event.target.value
+                      )
+                    }
+                    placeholder="Delivery instructions (optional)"
+                    rows="3"
+                  />
+                </section>
+
+                <section className="checkout-card">
+                  <div className="checkout-heading">
+                    <div>
+                      <p className="kicker">
+                        YOUR ITEMS
+                      </p>
+
+                      <h2>
+                        {cartCount
+                          ? `${cartCount} items in your bag`
+                          : 'Your bag is waiting'}
+                      </h2>
+                    </div>
+                  </div>
+
+                  {cart.length ? (
+                    cart.map((item) => (
+                      <div
+                        className="cart-line"
+                        key={item.id}
+                      >
+                        <img
+                          src={item.image}
+                          alt=""
+                        />
+
+                        <div>
+                          <h3>{item.name}</h3>
+
+                          <p>
+                            {item.restaurant} ·{' '}
+                            {item.isVeg === false
+                              ? 'Non-veg'
+                              : 'Veg'}
+                          </p>
+
+                          <div className="quantity-control">
+                            <button
+                              onClick={() =>
+                                updateQuantity(
+                                  item.id,
+                                  -1
+                                )
+                              }
+                            >
+                              -
+                            </button>
+
+                            <b>{item.qty}</b>
+
+                            <button
+                              onClick={() =>
+                                updateQuantity(
+                                  item.id,
+                                  1
+                                )
+                              }
+                            >
+                              +
+                            </button>
+                          </div>
+                        </div>
+
+                        <strong>
+                          ₹{item.price * item.qty}
+                        </strong>
+
+                        <button
+                          className="remove-item"
+                          onClick={() =>
+                            updateQuantity(
+                              item.id,
+                              -item.qty
+                            )
+                          }
+                          aria-label={`Remove ${item.name}`}
+                        >
+                          ×
+                        </button>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="empty-state">
+                      <span>＋</span>
+
+                      <h2>
+                        Your bag is empty
+                      </h2>
+
+                      <p>
+                        Something delicious is only a
+                        few clicks away.
+                      </p>
+
+                      <button
+                        className="primary-button"
+                        onClick={() =>
+                          navigate('Menu')
+                        }
+                      >
+                        Browse menu
+                      </button>
+                    </div>
+                  )}
+                </section>
+              </div>
+
+              <aside className="summary-card">
+                <p className="kicker">
+                  PAYMENT
+                </p>
+
+                <div className="payment-options">
+                  {[
+                    ['upi', 'UPI'],
+                    ['card', 'Card'],
+                    ['netbanking', 'Net banking'],
+                    ['cash', 'Cash on delivery'],
+                  ].map(([value, label]) => (
+                    <button
+                      key={value}
+                      className={
+                        paymentMethod === value
+                          ? 'selected'
+                          : ''
+                      }
+                      onClick={() =>
+                        setPaymentMethod(value)
+                      }
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="coupon-input">
+                  <input
+                    value={coupon}
+                    onChange={(event) =>
+                      setCoupon(event.target.value)
+                    }
+                    placeholder="Have a coupon?"
+                  />
+
+                  <button
+                    onClick={() => {
+                      if (coupon.trim()) {
+                        setAppliedCoupon(true)
+                      }
+                    }}
+                  >
+                    Apply
+                  </button>
+                </div>
+
+                <div className="summary-row">
+                  <span>Item total</span>
+                  <b>₹{subtotal}</b>
+                </div>
+
+                <div className="summary-row">
+                  <span>Delivery fee</span>
+
+                  <b
+                    className={
+                      delivery === 0
+                        ? 'green-text'
+                        : ''
+                    }
+                  >
+                    {delivery
+                      ? `₹${delivery}`
+                      : 'FREE'}
+                  </b>
+                </div>
+
+                <div className="summary-row">
+                  <span>Taxes</span>
+                  <b>₹{taxes}</b>
+                </div>
+
+                {appliedCoupon && (
+                  <div className="summary-row green-text">
+                    <span>Discount</span>
+                    <b>-₹{discount}</b>
+                  </div>
+                )}
+
+                <div className="summary-total">
+                  <span>Total</span>
+                  <b>₹{Math.max(total, 0)}</b>
+                </div>
+
+                {checkoutError && (
+                  <p className="checkout-error">
+                    {checkoutError}
+                  </p>
+                )}
+
+                <button
+                  disabled={!cart.length}
+                  className="primary-button full"
+                  onClick={placeOrder}
+                >
+                  Proceed to checkout
+                  <span>→</span>
+                </button>
+
+                <small className="payment-note">
+                  Secure payment processing. Online
+                  payments can be connected to Razorpay
+                  or Stripe.
+                </small>
+              </aside>
+            </div>
+          )}
+        </main>
+      )}
+
+      {activeView === 'Orders' && (
+        <main className="content-page">
+          <div className="page-title">
+            <div>
+              <p className="kicker">
+                YOUR ORDERS
+              </p>
+
+              <h1>Follow the flavour.</h1>
+            </div>
+          </div>
+
+          <Tracking past />
+        </main>
+      )}
+
+      {activeView === 'Admin' && (
+        <AdminDashboard token={token} />
+      )}
+
+      {activeView === 'Login' && (
+        <AuthView
+          mode={authMode}
+          setMode={setAuthMode}
+          onSubmit={(account, accountToken) => {
+            const initials = account.name
+              .split(' ')
+              .map((part) => part[0])
+              .join('')
+              .slice(0, 2)
+              .toUpperCase()
+
+            setUser({
+              ...account,
+              initials,
+            })
+
+            setToken(accountToken)
+
+            localStorage.setItem(
+              'food-delivery-token',
+              accountToken
+            )
+
+            setActiveView('Profile')
+          }}
+        />
+      )}
+
+      {activeView === 'Profile' && (
+        <AccountView
+          user={user}
+          addresses={addresses}
+          newAddress={newAddress}
+          setNewAddress={setNewAddress}
+          onAddAddress={() => {
+            if (newAddress.trim()) {
+              setAddresses((current) => [
+                ...current,
+                {
+                  id: Date.now(),
+                  label: current.length
+                    ? 'Other'
+                    : 'Home',
+                  text: newAddress.trim(),
+                },
+              ])
+
+              setNewAddress('')
+            }
+          }}
+          onRemoveAddress={(id) =>
+            setAddresses((current) =>
+              current.filter(
+                (address) => address.id !== id
+              )
+            )
+          }
+          onLogout={() => {
+            setUser(null)
+            setToken('')
+            localStorage.removeItem(
+              'food-delivery-token'
+            )
+            setActiveView('Login')
+          }}
+          onNavigate={setActiveView}
+        />
+      )}
+
+      {cartCount > 0 &&
+        activeView !== 'Cart' && (
+          <button
+            className="mobile-cart-fab"
+            onClick={() => navigate('Cart')}
+          >
+            <span>Bag</span>
+
+            <b>
+              {cartCount} · ₹{subtotal}
+            </b>
+
+            <span>→</span>
+          </button>
+        )}
+
+      <nav
+        className="bottom-nav"
+        aria-label="Mobile navigation"
+      >
+        <button
+          className={
+            activeView === 'Home'
+              ? 'active'
+              : ''
+          }
+          onClick={() => navigate('Home')}
+        >
+          <span>⌂</span>
+          Home
+        </button>
+
+        <button
+          className={
+            activeView === 'Menu'
+              ? 'active'
+              : ''
+          }
+          onClick={() => navigate('Menu')}
+        >
+          <span>⌕</span>
+          Menu
+        </button>
+
+        <button
+          className={
+            activeView === 'Orders'
+              ? 'active'
+              : ''
+          }
+          onClick={() => navigate('Orders')}
+        >
+          <span>◷</span>
+          Orders
+        </button>
+
+        <button
+          className={
+            activeView === 'Cart'
+              ? 'active'
+              : ''
+          }
+          onClick={() => navigate('Cart')}
+        >
+          <span>▱</span>
+          Bag
+        </button>
+      </nav>
     </div>
   )
 }
 
-function RestaurantCard({ restaurant, onOpen }) {
-  return <article className="restaurant-card" onClick={() => onOpen(restaurant)}><img src={restaurant.image} alt={restaurant.name} /><div className="restaurant-card-body"><div className="restaurant-card-title"><h3>{restaurant.name}</h3><span>★ {restaurant.rating}</span></div><p>{restaurant.cuisine.join(' · ')} <i>·</i> {restaurant.deliveryTime}</p><p className="restaurant-price">₹{restaurant.priceForTwo} for two</p><strong className="restaurant-offer">🏷️ {restaurant.offer}</strong></div></article>
+function RestaurantCard({
+  restaurant,
+  onOpen,
+  wished = false,
+  onWish,
+}) {
+  const cuisinesText = Array.isArray(
+    restaurant.cuisine
+  )
+    ? restaurant.cuisine.join(' · ')
+    : restaurant.cuisine || 'Multi-cuisine'
+
+  return (
+    <article
+      className="restaurant-card"
+      onClick={() => onOpen(restaurant)}
+    >
+      <div className="restaurant-image-wrap">
+        <img
+          src={restaurant.image}
+          alt={restaurant.name}
+          loading="lazy"
+        />
+
+        {restaurant.offer && (
+          <span className="restaurant-offer-badge">
+            {restaurant.offer}
+          </span>
+        )}
+
+        <button
+          className={`restaurant-heart ${
+            wished ? 'wished' : ''
+          }`}
+          onClick={(event) => {
+            event.stopPropagation()
+
+            if (onWish) {
+              onWish(restaurant.id)
+            }
+          }}
+          aria-label={`Save ${restaurant.name}`}
+        >
+          {wished ? '♥' : '♡'}
+        </button>
+      </div>
+
+      <div className="restaurant-card-body">
+        <div className="restaurant-card-title">
+          <h3>{restaurant.name}</h3>
+
+          <span className="restaurant-rating">
+            ★ {Number(restaurant.rating || 0).toFixed(1)}
+          </span>
+        </div>
+
+        <p className="restaurant-cuisine">
+          {cuisinesText}
+        </p>
+
+        <div className="restaurant-meta-row">
+          <span>
+            🕐 {restaurant.deliveryTime || '30-40 min'}
+          </span>
+
+          <span>
+            ₹{Number(restaurant.priceForTwo || 0)} for two
+          </span>
+        </div>
+
+        <div className="restaurant-card-footer">
+          <span className="delivery-label">
+            🛵 Delivery available
+          </span>
+
+          <span className="arrow">→</span>
+        </div>
+      </div>
+    </article>
+  )
 }
 
-function FoodCard({ food, wished, onWish, onAdd, onOpen, detailed = false }) {
-  return <article className={`food-card ${detailed ? 'food-card-detailed' : ''}`}><div className="food-image"><img src={food.image} alt={food.name} /><span className={`diet-indicator ${food.isVeg === false ? 'nonveg' : ''}`} aria-label={food.isVeg === false ? 'Non-vegetarian' : 'Vegetarian'} />{food.tag && <span className="food-tag">{food.tag}</span>}<button className={`wish-button ${wished ? 'wished' : ''}`} onClick={() => onWish(food.id)} aria-label="Save to wishlist">♡</button></div><div className="food-info"><div className="food-title"><h3>{food.name}</h3><span>★ {food.rating}</span></div>{onOpen && <button className="food-restaurant" onClick={onOpen}>{food.restaurant}</button>}<p>{food.description || `${food.restaurant} · ${food.time}`}</p><div className="food-bottom"><strong>₹{food.price}</strong><button className="add-button" onClick={() => onAdd(food)}>+ Add</button></div><small className="review-count">★★★★★ · {food.reviews || 0} reviews · {food.time}</small></div></article>
+function FoodCard({
+  food,
+  wished,
+  onWish,
+  onAdd,
+  onOpen,
+  detailed = false,
+}) {
+  return (
+    <article
+      className={`food-card ${
+        detailed ? 'food-card-detailed' : ''
+      }`}
+    >
+      <div className="food-image">
+        <img
+          src={food.image}
+          alt={food.name}
+          loading="lazy"
+        />
+
+        <span
+          className={`diet-indicator ${
+            food.isVeg === false ? 'nonveg' : ''
+          }`}
+          aria-label={
+            food.isVeg === false
+              ? 'Non-vegetarian'
+              : 'Vegetarian'
+          }
+        />
+
+        {food.tag && (
+          <span className="food-tag">
+            {food.tag}
+          </span>
+        )}
+
+        <button
+          className={`wish-button ${
+            wished ? 'wished' : ''
+          }`}
+          onClick={() => onWish(food.id)}
+          aria-label="Save to wishlist"
+        >
+          {wished ? '♥' : '♡'}
+        </button>
+      </div>
+
+      <div className="food-info">
+        <div className="food-title">
+          <h3>{food.name}</h3>
+
+          <span>
+            ★ {Number(food.rating || 0).toFixed(1)}
+          </span>
+        </div>
+
+        {onOpen && (
+          <button
+            className="food-restaurant"
+            onClick={onOpen}
+          >
+            {food.restaurant}
+          </button>
+        )}
+
+        <p>
+          {food.description ||
+            `${food.restaurant} · ${food.time}`}
+        </p>
+
+        <div className="food-bottom">
+          <strong>₹{food.price}</strong>
+
+          <button
+            className="add-button"
+            onClick={() => onAdd(food)}
+          >
+            + Add
+          </button>
+        </div>
+
+        <small className="review-count">
+          ★★★★★ · {food.reviews || 0} reviews ·{' '}
+          {food.time}
+        </small>
+      </div>
+    </article>
+  )
 }
 
-function Tracking({ past = false, orderNumber = 'MRS10245' }) {
-  const steps = ['Order placed', 'Restaurant confirmed', 'Food is being prepared', 'Out for delivery', 'Delivered']
+function Tracking({
+  past = false,
+  orderNumber = 'MRS10245',
+}) {
+  const steps = [
+    'Order placed',
+    'Restaurant confirmed',
+    'Food is being prepared',
+    'Out for delivery',
+    'Delivered',
+  ]
+
   const currentStep = past ? 4 : 3
-  return <div className="tracking-layout"><div className="tracking-card"><div className="tracking-head"><div><p className="kicker">ORDER #{orderNumber} · {past ? 'DELIVERED TODAY' : 'JUST NOW'}</p><h2>{past ? 'Delivered with care.' : 'Your order is on its way.'}</h2></div><span className="status-chip">{past ? 'Delivered' : '28 min left'}</span></div><div className="map-panel"><div className="map-road road-one" /><div className="map-road road-two" /><div className="map-dot start" /><div className="map-dot end">⌖</div><div className="delivery-pin">✦</div></div><div className="tracking-steps">{steps.map((step, index) => <div className={index < currentStep ? 'done' : index === currentStep ? 'current' : ''} key={step}><span>{index < currentStep ? '✓' : index === currentStep ? '●' : '○'}</span><b>{step}</b></div>)}</div><div className="estimated-delivery"><span>Estimated delivery</span><strong>{past ? 'Delivered at 1:12 PM' : '28 minutes'}</strong></div></div><aside className="driver-card"><div className="driver-avatar">RK</div><div><p className="kicker">YOUR DELIVERY PARTNER</p><h3>Rakesh is on the way</h3><p>Royal Enfield · KA 05 MJ 2291</p></div><button className="call-button">☎</button></aside></div>
+
+  return (
+    <div className="tracking-layout">
+      <div className="tracking-card">
+        <div className="tracking-head">
+          <div>
+            <p className="kicker">
+              ORDER #{orderNumber} ·{' '}
+              {past ? 'DELIVERED TODAY' : 'JUST NOW'}
+            </p>
+
+            <h2>
+              {past
+                ? 'Delivered with care.'
+                : 'Your order is on its way.'}
+            </h2>
+          </div>
+
+          <span className="status-chip">
+            {past ? 'Delivered' : '28 min left'}
+          </span>
+        </div>
+
+        <div className="map-panel">
+          <div className="map-road road-one" />
+          <div className="map-road road-two" />
+
+          <div className="map-dot start" />
+          <div className="map-dot end">⌖</div>
+          <div className="delivery-pin">✦</div>
+        </div>
+
+        <div className="tracking-steps">
+          {steps.map((step, index) => (
+            <div
+              className={
+                index < currentStep
+                  ? 'done'
+                  : index === currentStep
+                  ? 'current'
+                  : ''
+              }
+              key={step}
+            >
+              <span>
+                {index < currentStep
+                  ? '✓'
+                  : index === currentStep
+                  ? '●'
+                  : '○'}
+              </span>
+
+              <b>{step}</b>
+            </div>
+          ))}
+        </div>
+
+        <div className="estimated-delivery">
+          <span>Estimated delivery</span>
+
+          <strong>
+            {past
+              ? 'Delivered at 1:12 PM'
+              : '28 minutes'}
+          </strong>
+        </div>
+      </div>
+
+      <aside className="driver-card">
+        <div className="driver-avatar">
+          RK
+        </div>
+
+        <div>
+          <p className="kicker">
+            YOUR DELIVERY PARTNER
+          </p>
+
+          <h3>Rakesh is on the way</h3>
+
+          <p>
+            Royal Enfield · KA 05 MJ 2291
+          </p>
+        </div>
+
+        <button className="call-button">
+          ☎
+        </button>
+      </aside>
+    </div>
+  )
 }
 
-function AuthView({ mode, setMode, onSubmit }) {
+function AuthView({
+  mode,
+  setMode,
+  onSubmit,
+}) {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+
   const submit = async (event) => {
     event.preventDefault()
-    const payload = mode === 'login' ? { email, password } : { name, email, password }
+
+    const payload =
+      mode === 'login'
+        ? { email, password }
+        : { name, email, password }
+
     try {
-      const response = await fetch(`/api/auth/${mode === 'login' ? 'login' : 'register'}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+      const response = await fetch(
+        `/api/auth/${
+          mode === 'login'
+            ? 'login'
+            : 'register'
+        }`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type':
+              'application/json',
+          },
+          body: JSON.stringify(payload),
+        }
+      )
+
       const data = await response.json()
-      if (!response.ok) throw new Error(data.message || 'Unable to continue')
+
+      if (!response.ok) {
+        throw new Error(
+          data.message ||
+            'Unable to continue'
+        )
+      }
+
       onSubmit(data.user, data.token)
     } catch (requestError) {
       setError(requestError.message)
-      if (requestError.message === 'Failed to fetch') onSubmit({ name: name || 'Ananya Rao', email: email || 'ananya@example.com' }, '')
+
+      if (
+        requestError.message ===
+        'Failed to fetch'
+      ) {
+        onSubmit(
+          {
+            name:
+              name ||
+              'Ananya Rao',
+            email:
+              email ||
+              'ananya@example.com',
+          },
+          ''
+        )
+      }
     }
   }
-  return <main className="content-page auth-page"><form className="auth-card" onSubmit={submit}><span className="brand-mark">+</span><p className="kicker">{mode === 'login' ? 'WELCOME BACK' : 'JOIN MORSEL'}</p><h1>{mode === 'login' ? 'Sign in to morsel.' : 'Make every meal yours.'}</h1>{mode === 'signup' && <input value={name} onChange={(event) => setName(event.target.value)} placeholder="Full name" required /> }<input value={email} onChange={(event) => setEmail(event.target.value)} placeholder="Email address" type="email" required /><input value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Password" type="password" required />{error && <p className="auth-error">{error}</p>}<button className="primary-button full" type="submit">{mode === 'login' ? 'Continue' : 'Create account'} <span>→</span></button><button className="auth-switch" type="button" onClick={() => { setError(''); setMode(mode === 'login' ? 'signup' : 'login') }}>{mode === 'login' ? 'New to morsel? Create an account' : 'Already have an account? Sign in'}</button></form></main>
+
+  return (
+    <main className="content-page auth-page">
+      <form
+        className="auth-card"
+        onSubmit={submit}
+      >
+        <span className="brand-mark">
+          +
+        </span>
+
+        <p className="kicker">
+          {mode === 'login'
+            ? 'WELCOME BACK'
+            : 'JOIN MORSEL'}
+        </p>
+
+        <h1>
+          {mode === 'login'
+            ? 'Sign in to morsel.'
+            : 'Make every meal yours.'}
+        </h1>
+
+        {mode === 'signup' && (
+          <input
+            value={name}
+            onChange={(event) =>
+              setName(event.target.value)
+            }
+            placeholder="Full name"
+            required
+          />
+        )}
+
+        <input
+          value={email}
+          onChange={(event) =>
+            setEmail(event.target.value)
+          }
+          placeholder="Email address"
+          type="email"
+          required
+        />
+
+        <input
+          value={password}
+          onChange={(event) =>
+            setPassword(event.target.value)
+          }
+          placeholder="Password"
+          type="password"
+          required
+        />
+
+        {error && (
+          <p className="auth-error">
+            {error}
+          </p>
+        )}
+
+        <button
+          className="primary-button full"
+          type="submit"
+        >
+          {mode === 'login'
+            ? 'Continue'
+            : 'Create account'}
+
+          <span>→</span>
+        </button>
+
+        <button
+          className="auth-switch"
+          type="button"
+          onClick={() => {
+            setError('')
+            setMode(
+              mode === 'login'
+                ? 'signup'
+                : 'login'
+            )
+          }}
+        >
+          {mode === 'login'
+            ? 'New to morsel? Create an account'
+            : 'Already have an account? Sign in'}
+        </button>
+      </form>
+    </main>
+  )
 }
 
-function AccountView({ user, addresses, newAddress, setNewAddress, onAddAddress, onRemoveAddress, onLogout, onNavigate }) {
-  return <main className="content-page account-page"><div className="page-title"><div><p className="kicker">YOUR MORSEL ACCOUNT</p><h1>Made for you.</h1></div><button className="text-button" onClick={onLogout}>Sign out</button></div><div className="account-layout"><aside className="profile-card"><div className="profile-avatar">{user?.initials || 'AR'}</div><h2>{user?.name || 'Ananya Rao'}</h2><p>{user?.email || 'ananya@example.com'}</p><button className="primary-button full" onClick={() => onNavigate('Orders')}>View order history <span>→</span></button></aside><section className="account-main"><div className="account-section"><div className="account-heading"><div><p className="kicker">SAVED PLACES</p><h2>Delivery addresses</h2></div><span>{addresses.length} saved</span></div><div className="address-list">{addresses.map((address) => <div className="address-row" key={address.id}><span className="address-icon">⌖</span><div><b>{address.label}</b><p>{address.text}</p></div><button onClick={() => onRemoveAddress(address.id)} aria-label={`Remove ${address.label} address`}>×</button></div>)}{!addresses.length && <p className="muted-copy">Add a home, work, or favourite delivery spot.</p>}</div><div className="address-form"><input value={newAddress} onChange={(event) => setNewAddress(event.target.value)} placeholder="Add an address, landmark or area" /><button className="add-button" onClick={onAddAddress}>+ Save address</button></div></div><div className="account-quick"><button onClick={() => onNavigate('Wishlist')}><span>♡</span><div><b>Favorites</b><small>Your saved dishes</small></div><strong>→</strong></button><button onClick={() => onNavigate('Orders')}><span>◷</span><div><b>My orders</b><small>Track past deliveries</small></div><strong>→</strong></button><button onClick={() => onNavigate('Cart')}><span>▱</span><div><b>Your cart</b><small>Ready when you are</small></div><strong>→</strong></button><button className="account-static"><span>🎟️</span><div><b>Coupons</b><small>FIRSTBITE · ₹100 off</small></div><strong>→</strong></button><button className="account-static"><span>💳</span><div><b>Payment methods</b><small>UPI, cards, and cash</small></div><strong>→</strong></button><button className="account-static"><span>⚙</span><div><b>Settings</b><small>Notifications and preferences</small></div><strong>→</strong></button></div></section></div></main>
+function AccountView({
+  user,
+  addresses,
+  newAddress,
+  setNewAddress,
+  onAddAddress,
+  onRemoveAddress,
+  onLogout,
+  onNavigate,
+}) {
+  return (
+    <main className="content-page account-page">
+      <div className="page-title">
+        <div>
+          <p className="kicker">
+            YOUR MORSEL ACCOUNT
+          </p>
+
+          <h1>Made for you.</h1>
+        </div>
+
+        <button
+          className="text-button"
+          onClick={onLogout}
+        >
+          Sign out
+        </button>
+      </div>
+
+      <div className="account-layout">
+        <aside className="profile-card">
+          <div className="profile-avatar">
+            {user?.initials || 'AR'}
+          </div>
+
+          <h2>
+            {user?.name ||
+              'Ananya Rao'}
+          </h2>
+
+          <p>
+            {user?.email ||
+              'ananya@example.com'}
+          </p>
+
+          <button
+            className="primary-button full"
+            onClick={() =>
+              onNavigate('Orders')
+            }
+          >
+            View order history
+            <span>→</span>
+          </button>
+        </aside>
+
+        <section className="account-main">
+          <div className="account-section">
+            <div className="account-heading">
+              <div>
+                <p className="kicker">
+                  SAVED PLACES
+                </p>
+
+                <h2>
+                  Delivery addresses
+                </h2>
+              </div>
+
+              <span>
+                {addresses.length} saved
+              </span>
+            </div>
+
+            <div className="address-list">
+              {addresses.map(
+                (address) => (
+                  <div
+                    className="address-row"
+                    key={address.id}
+                  >
+                    <span className="address-icon">
+                      ⌖
+                    </span>
+
+                    <div>
+                      <b>
+                        {address.label}
+                      </b>
+
+                      <p>
+                        {address.text}
+                      </p>
+                    </div>
+
+                    <button
+                      onClick={() =>
+                        onRemoveAddress(
+                          address.id
+                        )
+                      }
+                      aria-label={`Remove ${address.label} address`}
+                    >
+                      ×
+                    </button>
+                  </div>
+                )
+              )}
+
+              {!addresses.length && (
+                <p className="muted-copy">
+                  Add a home, work, or
+                  favourite delivery spot.
+                </p>
+              )}
+            </div>
+
+            <div className="address-form">
+              <input
+                value={newAddress}
+                onChange={(event) =>
+                  setNewAddress(
+                    event.target.value
+                  )
+                }
+                placeholder="Add an address, landmark or area"
+              />
+
+              <button
+                className="add-button"
+                onClick={onAddAddress}
+              >
+                + Save address
+              </button>
+            </div>
+          </div>
+
+          <div className="account-quick">
+            <button
+              onClick={() =>
+                onNavigate('Wishlist')
+              }
+            >
+              <span>♡</span>
+
+              <div>
+                <b>Favorites</b>
+                <small>
+                  Your saved dishes
+                </small>
+              </div>
+
+              <strong>→</strong>
+            </button>
+
+            <button
+              onClick={() =>
+                onNavigate('Orders')
+              }
+            >
+              <span>◷</span>
+
+              <div>
+                <b>My orders</b>
+                <small>
+                  Track past deliveries
+                </small>
+              </div>
+
+              <strong>→</strong>
+            </button>
+
+            <button
+              onClick={() =>
+                onNavigate('Cart')
+              }
+            >
+              <span>▱</span>
+
+              <div>
+                <b>Your cart</b>
+                <small>
+                  Ready when you are
+                </small>
+              </div>
+
+              <strong>→</strong>
+            </button>
+
+            <button className="account-static">
+              <span>🎟️</span>
+
+              <div>
+                <b>Coupons</b>
+                <small>
+                  FIRSTBITE · ₹100 off
+                </small>
+              </div>
+
+              <strong>→</strong>
+            </button>
+
+            <button className="account-static">
+              <span>💳</span>
+
+              <div>
+                <b>Payment methods</b>
+                <small>
+                  UPI, cards, and cash
+                </small>
+              </div>
+
+              <strong>→</strong>
+            </button>
+
+            <button className="account-static">
+              <span>⚙</span>
+
+              <div>
+                <b>Settings</b>
+                <small>
+                  Notifications and preferences
+                </small>
+              </div>
+
+              <strong>→</strong>
+            </button>
+          </div>
+        </section>
+      </div>
+    </main>
+  )
 }
 
 function AdminDashboard({ token }) {
-  const [tab, setTab] = useState('overview')
-  const [analytics, setAnalytics] = useState(null)
-  const [adminData, setAdminData] = useState({ restaurants: [], foods: [], orders: [] })
+  const [tab, setTab] =
+    useState('overview')
+
+  const [analytics, setAnalytics] =
+    useState(null)
+
+  const [adminData, setAdminData] =
+    useState({
+      restaurants: [],
+      foods: [],
+      orders: [],
+    })
+
   useEffect(() => {
     if (!token) return
-    const headers = { Authorization: `Bearer ${token}` }
-    Promise.all([fetch('/api/admin/analytics', { headers }), fetch('/api/admin/restaurants', { headers }), fetch('/api/admin/foods', { headers }), fetch('/api/admin/orders', { headers })]).then(async ([analyticsResponse, restaurantsResponse, foodsResponse, ordersResponse]) => {
-      const [analyticsData, restaurants, foods, orders] = await Promise.all([analyticsResponse.json(), restaurantsResponse.json(), foodsResponse.json(), ordersResponse.json()])
-      setAnalytics(analyticsData); setAdminData({ restaurants, foods, orders })
-    }).catch(() => {})
+
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    }
+
+    Promise.all([
+      fetch('/api/admin/analytics', {
+        headers,
+      }),
+      fetch('/api/admin/restaurants', {
+        headers,
+      }),
+      fetch('/api/admin/foods', {
+        headers,
+      }),
+      fetch('/api/admin/orders', {
+        headers,
+      }),
+    ])
+      .then(
+        async ([
+          analyticsResponse,
+          restaurantsResponse,
+          foodsResponse,
+          ordersResponse,
+        ]) => {
+          const [
+            analyticsData,
+            restaurants,
+            foods,
+            orders,
+          ] = await Promise.all([
+            analyticsResponse.json(),
+            restaurantsResponse.json(),
+            foodsResponse.json(),
+            ordersResponse.json(),
+          ])
+
+          setAnalytics(
+            analyticsData
+          )
+
+          setAdminData({
+            restaurants,
+            foods,
+            orders,
+          })
+        }
+      )
+      .catch(() => {})
   }, [token])
-  const stats = analytics?.summary || { orders: 128, revenue: 42850, averageOrder: 334 }
-  return <main className="content-page admin-page"><div className="page-title"><div><p className="kicker">OPERATIONS / {tab.toUpperCase()}</p><h1>Good morning, Ananya.</h1></div><button className="export-button">↓ Export report</button></div><div className="admin-tabs">{[['overview', 'Analytics'], ['restaurants', 'Restaurants'], ['foods', 'Food'], ['orders', 'Orders']].map(([value, label]) => <button key={value} className={tab === value ? 'selected' : ''} onClick={() => setTab(value)}>{label}</button>)}</div>{tab === 'overview' && <><div className="stats-grid">{[[stats.orders, '+12.8%', 'Today\'s orders'], [`₹${Math.round(stats.revenue).toLocaleString('en-IN')}`, '+18.4%', 'Revenue'], [Math.round(stats.averageOrder), '+8.1%', 'Average order'], [adminData.restaurants.length || 86, '+6.2%', 'Restaurants']].map(([value, change, label]) => <div className="stat-card" key={label}><p>{label}</p><strong>{value}</strong><span>{change} vs last week</span></div>)}</div><div className="analytics-grid"><section className="chart-card"><div className="chart-heading"><div><p className="kicker">REVENUE</p><h2>Daily performance</h2></div><select><option>Last 7 days</option></select></div><div className="chart"><div className="chart-fill" /><svg viewBox="0 0 700 180" preserveAspectRatio="none"><polyline points="0,145 90,128 180,145 270,88 360,110 450,48 540,67 700,22" fill="none" stroke="currentColor" strokeWidth="4" /></svg><div className="chart-labels"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div></div></section><section className="chart-card"><p className="kicker">ORDER STATUS</p><h2>Fulfilment health</h2>{(analytics?.byStatus || [{ _id: 'preparing', count: 32 }, { _id: 'delivered', count: 68 }, { _id: 'out-for-delivery', count: 18 }]).map((item) => <div className="bar-row" key={item._id}><span>{item._id}</span><div><i style={{ width: `${Math.min(item.count, 100)}%` }} /></div><b>{item.count}</b></div>)}</section></div></>}{tab !== 'overview' && <AdminTable tab={tab} data={adminData} />}</main>
+
+  const stats =
+    analytics?.summary || {
+      orders: 128,
+      revenue: 42850,
+      averageOrder: 334,
+    }
+
+  return (
+    <main className="content-page admin-page">
+      <div className="page-title">
+        <div>
+          <p className="kicker">
+            OPERATIONS /{' '}
+            {tab.toUpperCase()}
+          </p>
+
+          <h1>
+            Good morning, Ananya.
+          </h1>
+        </div>
+
+        <button className="export-button">
+          ↓ Export report
+        </button>
+      </div>
+
+      <div className="admin-tabs">
+        {[
+          ['overview', 'Analytics'],
+          ['restaurants', 'Restaurants'],
+          ['foods', 'Food'],
+          ['orders', 'Orders'],
+        ].map(
+          ([value, label]) => (
+            <button
+              key={value}
+              className={
+                tab === value
+                  ? 'selected'
+                  : ''
+              }
+              onClick={() =>
+                setTab(value)
+              }
+            >
+              {label}
+            </button>
+          )
+        )}
+      </div>
+
+      {tab === 'overview' && (
+        <>
+          <div className="stats-grid">
+            {[
+              [
+                stats.orders,
+                '+12.8%',
+                "Today's orders",
+              ],
+              [
+                `₹${Math.round(
+                  stats.revenue
+                ).toLocaleString(
+                  'en-IN'
+                )}`,
+                '+18.4%',
+                'Revenue',
+              ],
+              [
+                Math.round(
+                  stats.averageOrder
+                ),
+                '+8.1%',
+                'Average order',
+              ],
+              [
+                adminData.restaurants
+                  .length || 86,
+                '+6.2%',
+                'Restaurants',
+              ],
+            ].map(
+              ([
+                value,
+                change,
+                label,
+              ]) => (
+                <div
+                  className="stat-card"
+                  key={label}
+                >
+                  <p>{label}</p>
+                  <strong>
+                    {value}
+                  </strong>
+                  <span>
+                    {change} vs last week
+                  </span>
+                </div>
+              )
+            )}
+          </div>
+
+          <div className="analytics-grid">
+            <section className="chart-card">
+              <div className="chart-heading">
+                <div>
+                  <p className="kicker">
+                    REVENUE
+                  </p>
+
+                  <h2>
+                    Daily performance
+                  </h2>
+                </div>
+
+                <select>
+                  <option>
+                    Last 7 days
+                  </option>
+                </select>
+              </div>
+
+              <div className="chart">
+                <div className="chart-fill" />
+
+                <svg
+                  viewBox="0 0 700 180"
+                  preserveAspectRatio="none"
+                >
+                  <polyline
+                    points="0,145 90,128 180,145 270,88 360,110 450,48 540,67 700,22"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  />
+                </svg>
+
+                <div className="chart-labels">
+                  <span>Mon</span>
+                  <span>Tue</span>
+                  <span>Wed</span>
+                  <span>Thu</span>
+                  <span>Fri</span>
+                  <span>Sat</span>
+                  <span>Sun</span>
+                </div>
+              </div>
+            </section>
+
+            <section className="chart-card">
+              <p className="kicker">
+                ORDER STATUS
+              </p>
+
+              <h2>
+                Fulfilment health
+              </h2>
+
+              {(
+                analytics?.byStatus || [
+                  {
+                    _id: 'preparing',
+                    count: 32,
+                  },
+                  {
+                    _id: 'delivered',
+                    count: 68,
+                  },
+                  {
+                    _id: 'out-for-delivery',
+                    count: 18,
+                  },
+                ]
+              ).map((item) => (
+                <div
+                  className="bar-row"
+                  key={item._id}
+                >
+                  <span>
+                    {item._id}
+                  </span>
+
+                  <div>
+                    <i
+                      style={{
+                        width: `${Math.min(
+                          item.count,
+                          100
+                        )}%`,
+                      }}
+                    />
+                  </div>
+
+                  <b>
+                    {item.count}
+                  </b>
+                </div>
+              ))}
+            </section>
+          </div>
+        </>
+      )}
+
+      {tab !== 'overview' && (
+        <AdminTable
+          tab={tab}
+          data={adminData}
+        />
+      )}
+    </main>
+  )
 }
 
-function AdminTable({ tab, data }) {
-  if (tab === 'restaurants') return <section className="admin-table-card"><div className="admin-table-heading"><h2>Restaurants</h2><button className="primary-button">+ Add restaurant</button></div><div className="admin-table"><div className="admin-table-row admin-table-header"><span>Restaurant</span><span>Cuisine</span><span>Rating</span><span>Status</span></div>{data.restaurants.length ? data.restaurants.map((restaurant) => <div className="admin-table-row" key={restaurant._id}><span><b>{restaurant.name}</b><small>{restaurant.address?.city || 'Bengaluru'}</small></span><span>{restaurant.cuisine?.join(', ')}</span><span>★ {restaurant.rating}</span><span className="status-open">{restaurant.isOpen === false ? 'Closed' : 'Open'}</span></div>) : <p className="muted-copy">Sign in as an admin to load restaurant records.</p>}</div></section>
-  if (tab === 'foods') return <section className="admin-table-card"><div className="admin-table-heading"><h2>Food catalogue</h2><button className="primary-button">+ Add food</button></div><div className="admin-table"><div className="admin-table-row admin-table-header"><span>Food</span><span>Restaurant</span><span>Price</span><span>Availability</span></div>{data.foods.length ? data.foods.map((food) => <div className="admin-table-row" key={food._id}><span><b>{food.name}</b><small>{food.category}</small></span><span>{food.restaurantId?.name || 'Unassigned'}</span><span>₹{food.price}</span><span className="status-open">{food.isAvailable === false ? 'Unavailable' : 'Available'}</span></div>) : <p className="muted-copy">Sign in as an admin to load food records.</p>}</div></section>
-  return <section className="admin-table-card"><div className="admin-table-heading"><h2>Orders</h2><button className="text-button">Refresh</button></div><div className="admin-table"><div className="admin-table-row admin-table-header"><span>Order</span><span>Customer</span><span>Amount</span><span>Status</span></div>{data.orders.length ? data.orders.map((order) => <div className="admin-table-row" key={order._id}><span><b>MRS{order._id.slice(-6).toUpperCase()}</b><small>{new Date(order.createdAt).toLocaleDateString()}</small></span><span>{order.userId?.name || 'Customer'}</span><span>₹{order.totalAmount}</span><span className="status-open">{order.status}</span></div>) : <p className="muted-copy">Sign in as an admin to load order records.</p>}</div></section>
+function AdminTable({
+  tab,
+  data,
+}) {
+  if (tab === 'restaurants') {
+    return (
+      <section className="admin-table-card">
+        <div className="admin-table-heading">
+          <h2>Restaurants</h2>
+
+          <button className="primary-button">
+            + Add restaurant
+          </button>
+        </div>
+
+        <div className="admin-table">
+          <div className="admin-table-row admin-table-header">
+            <span>Restaurant</span>
+            <span>Cuisine</span>
+            <span>Rating</span>
+            <span>Status</span>
+          </div>
+
+          {data.restaurants.length ? (
+            data.restaurants.map(
+              (restaurant) => (
+                <div
+                  className="admin-table-row"
+                  key={restaurant._id}
+                >
+                  <span>
+                    <b>
+                      {restaurant.name}
+                    </b>
+
+                    <small>
+                      {restaurant.address?.city ||
+                        'Bengaluru'}
+                    </small>
+                  </span>
+
+                  <span>
+                    {restaurant.cuisine?.join(
+                      ', '
+                    )}
+                  </span>
+
+                  <span>
+                    ★ {restaurant.rating}
+                  </span>
+
+                  <span className="status-open">
+                    {restaurant.isOpen ===
+                    false
+                      ? 'Closed'
+                      : 'Open'}
+                  </span>
+                </div>
+              )
+            )
+          ) : (
+            <p className="muted-copy">
+              Sign in as an admin to load
+              restaurant records.
+            </p>
+          )}
+        </div>
+      </section>
+    )
+  }
+
+  if (tab === 'foods') {
+    return (
+      <section className="admin-table-card">
+        <div className="admin-table-heading">
+          <h2>Food catalogue</h2>
+
+          <button className="primary-button">
+            + Add food
+          </button>
+        </div>
+
+        <div className="admin-table">
+          <div className="admin-table-row admin-table-header">
+            <span>Food</span>
+            <span>Restaurant</span>
+            <span>Price</span>
+            <span>Availability</span>
+          </div>
+
+          {data.foods.length ? (
+            data.foods.map(
+              (food) => (
+                <div
+                  className="admin-table-row"
+                  key={food._id}
+                >
+                  <span>
+                    <b>{food.name}</b>
+
+                    <small>
+                      {food.category}
+                    </small>
+                  </span>
+
+                  <span>
+                    {food.restaurantId?.name ||
+                      'Unassigned'}
+                  </span>
+
+                  <span>
+                    ₹{food.price}
+                  </span>
+
+                  <span className="status-open">
+                    {food.isAvailable ===
+                    false
+                      ? 'Unavailable'
+                      : 'Available'}
+                  </span>
+                </div>
+              )
+            )
+          ) : (
+            <p className="muted-copy">
+              Sign in as an admin to load food
+              records.
+            </p>
+          )}
+        </div>
+      </section>
+    )
+  }
+
+  return (
+    <section className="admin-table-card">
+      <div className="admin-table-heading">
+        <h2>Orders</h2>
+
+        <button className="text-button">
+          Refresh
+        </button>
+      </div>
+
+      <div className="admin-table">
+        <div className="admin-table-row admin-table-header">
+          <span>Order</span>
+          <span>Customer</span>
+          <span>Amount</span>
+          <span>Status</span>
+        </div>
+
+        {data.orders.length ? (
+          data.orders.map(
+            (order) => (
+              <div
+                className="admin-table-row"
+                key={order._id}
+              >
+                <span>
+                  <b>
+                    MRS
+                    {order._id
+                      .slice(-6)
+                      .toUpperCase()}
+                  </b>
+
+                  <small>
+                    {new Date(
+                      order.createdAt
+                    ).toLocaleDateString()}
+                  </small>
+                </span>
+
+                <span>
+                  {order.userId?.name ||
+                    'Customer'}
+                </span>
+
+                <span>
+                  ₹{order.totalAmount}
+                </span>
+
+                <span className="status-open">
+                  {order.status}
+                </span>
+              </div>
+            )
+          )
+        ) : (
+          <p className="muted-copy">
+            Sign in as an admin to load order
+            records.
+          </p>
+        )}
+      </div>
+    </section>
+  )
 }
 
 export default App
