@@ -20,6 +20,40 @@ const foodsSeed = [
   { id: 'noodles', name: 'Veg Hakka Noodles', category: 'Chinese', restaurant: 'Wok Express', restaurantId: 'wok-express', price: 219, rating: 4.6, description: 'Wok-tossed noodles with crisp vegetables.', image: 'https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?auto=format&fit=crop&w=800&q=85' },
   { id: 'biryani', name: 'Chicken Biryani', category: 'Indian', restaurant: 'Saffron House', restaurantId: 'saffron-house', price: 379, rating: 4.9, description: 'Aromatic rice layered with spiced chicken.', image: 'https://images.unsplash.com/photo-1633945274405-b6c8069047b0?auto=format&fit=crop&w=800&q=85' },
 ]
+const restaurantMenus = {
+  'spice-garden': [
+    { id: 'spice-tikka', name: 'Tandoori Chicken Tikka', category: 'Starters', restaurant: 'Spice Garden', restaurantId: 'spice-garden', price: 329, rating: 4.8, description: 'Charred chicken, hung yoghurt and warming spices.', image: 'https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?auto=format&fit=crop&w=800&q=85' },
+    { id: 'spice-naan', name: 'Garlic Butter Naan', category: 'Breads', restaurant: 'Spice Garden', restaurantId: 'spice-garden', price: 89, rating: 4.7, description: 'Soft tandoor bread finished with garlic butter.', image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=800&q=85' },
+  ],
+  'pizza-hub': [
+    { id: 'pizza-pesto', name: 'Pesto Garden Pizza', category: 'Pizza', restaurant: 'Pizza Hub', restaurantId: 'pizza-hub', price: 389, rating: 4.8, description: 'Basil pesto, mozzarella, tomatoes and greens.', image: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=800&q=85' },
+    { id: 'pizza-pasta', name: 'Creamy Herb Pasta', category: 'Italian', restaurant: 'Pizza Hub', restaurantId: 'pizza-hub', price: 319, rating: 4.6, description: 'Silky cream sauce with herbs and parmesan.', image: 'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=800&q=85' },
+  ],
+  'wok-express': [
+    { id: 'wok-dumplings', name: 'Steamed Veg Dumplings', category: 'Momos', restaurant: 'Wok Express', restaurantId: 'wok-express', price: 229, rating: 4.7, description: 'Delicate dumplings with ginger soy dipping sauce.', image: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=800&q=85' },
+    { id: 'wok-rice', name: 'Schezwan Fried Rice', category: 'Rice', restaurant: 'Wok Express', restaurantId: 'wok-express', price: 249, rating: 4.6, description: 'Smoky wok rice tossed with vegetables and chilli.', image: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=85' },
+  ],
+  'saffron-house': [
+    { id: 'saffron-kebab', name: 'Saffron Seekh Kebab', category: 'Tandoor', restaurant: 'Saffron House', restaurantId: 'saffron-house', price: 349, rating: 4.8, description: 'Juicy minced kebabs with mint chutney.', image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=85' },
+    { id: 'saffron-kheer', name: 'Cardamom Kheer', category: 'Desserts', restaurant: 'Saffron House', restaurantId: 'saffron-house', price: 149, rating: 4.5, description: 'Slow-cooked rice pudding with pistachio.', image: 'https://images.unsplash.com/photo-1599785209707-a456fc1337bb?auto=format&fit=crop&w=800&q=85' },
+  ],
+  'green-bowl': [
+    { id: 'green-avocado', name: 'Avocado Grain Bowl', category: 'Healthy', restaurant: 'Green Bowl', restaurantId: 'green-bowl', price: 299, rating: 4.7, description: 'Avocado, grains, greens and citrus dressing.', image: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=85' },
+    { id: 'green-smoothie', name: 'Mango Green Smoothie', category: 'Drinks', restaurant: 'Green Bowl', restaurantId: 'green-bowl', price: 179, rating: 4.6, description: 'Fresh mango, spinach and coconut water.', image: 'https://images.unsplash.com/photo-1502741224143-90386d7f8c82?auto=format&fit=crop&w=800&q=85' },
+  ],
+  'burger-atelier': [
+    { id: 'atelier-cheese', name: 'Smoky Cheese Burger', category: 'Burgers', restaurant: 'Burger Atelier', restaurantId: 'burger-atelier', price: 329, rating: 4.9, description: 'Crispy edges, aged cheddar and smoky sauce.', image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=85' },
+    { id: 'atelier-fries', name: 'Truffle Parmesan Fries', category: 'Sides', restaurant: 'Burger Atelier', restaurantId: 'burger-atelier', price: 189, rating: 4.7, description: 'Golden fries with truffle oil and parmesan.', image: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=800&q=85' },
+  ],
+  'tokyo-table': [
+    { id: 'tokyo-ramen', name: 'Miso Ramen', category: 'Ramen', restaurant: 'Tokyo Table', restaurantId: 'tokyo-table', price: 399, rating: 4.8, description: 'Rich miso broth, noodles, corn and greens.', image: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=800&q=85' },
+    { id: 'tokyo-sushi', name: 'Salmon Sushi Roll', category: 'Sushi', restaurant: 'Tokyo Table', restaurantId: 'tokyo-table', price: 429, rating: 4.7, description: 'Fresh salmon, avocado and seasoned rice.', image: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=800&q=85' },
+  ],
+  'sweet-theory': [
+    { id: 'sweet-brownie', name: 'Warm Fudge Brownie', category: 'Desserts', restaurant: 'Sweet Theory', price: 199, rating: 4.8, description: 'Dark chocolate brownie with a soft centre.', image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=85' },
+    { id: 'sweet-cheesecake', name: 'Berry Cheesecake', category: 'Desserts', restaurant: 'Sweet Theory', price: 249, rating: 4.7, description: 'Creamy cheesecake with bright berry compote.', image: 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=800&q=85' },
+  ],
+}
 const categoryIcons = { All: '✦', Pizza: '🍕', Burgers: '🍔', Chicken: '🍗', Chinese: '🍜', Momos: '🥟', Biryani: '🍛', Healthy: '🥗', Desserts: '🍰' }
 const idOf = (value) => value?._id || value?.id
 const money = (value) => `₹${Math.round(Number(value) || 0)}`
@@ -100,7 +134,7 @@ export default function App() {
     {notice && <div className="toast">{notice}</div>}
     {view === 'home' && <Home onRestaurants={() => go('restaurants')} restaurants={restaurants} foods={foods} openRestaurant={openRestaurant} addToCart={addToCart} cuisines={cuisines} setCuisine={setCuisine} setSearch={runSearch} recentSearches={recentSearches} favorites={favorites} toggleFavorite={toggleFavorite} />}
     {view === 'restaurants' && <main className="content"><Heading eyebrow="DISCOVER" title="Restaurants near you" text={`${visibleRestaurants.length} places serving your favourites`} /><div className="filters"><select value={sort} onChange={(event) => setSort(event.target.value)}><option value="rating">Top rated</option><option value="delivery">Fastest delivery</option></select>{cuisines.map((item) => <button className={cuisine === item ? 'active' : ''} key={item} onClick={() => setCuisine(item)}>{item}</button>)}</div>{!search && recentSearches.length > 0 && <div className="search-history"><b>Recent searches</b>{recentSearches.map((item) => <button key={item} onClick={() => runSearch(item)}>{item}</button>)}</div>}<div className="restaurant-grid">{visibleRestaurants.map((item) => <RestaurantCard key={idOf(item)} item={item} open={openRestaurant} favorite={favorites.includes(idOf(item))} toggleFavorite={toggleFavorite} />)}</div></main>}
-    {view === 'restaurant' && activeRestaurant && <RestaurantDetail item={activeRestaurant} foods={foods.filter((food) => String(food.restaurantId) === String(idOf(activeRestaurant)) || food.restaurant === activeRestaurant.name)} addToCart={addToCart} back={() => go('restaurants')} />}
+    {view === 'restaurant' && activeRestaurant && <RestaurantDetail item={activeRestaurant} foods={[...foods.filter((food) => String(food.restaurantId) === String(idOf(activeRestaurant)) || food.restaurant === activeRestaurant.name), ...(restaurantMenus[idOf(activeRestaurant)] || [])].filter((food, index, list) => list.findIndex((entry) => idOf(entry) === idOf(food)) === index)} addToCart={addToCart} back={() => go('restaurants')} />}
     {view === 'cart' && <Cart cart={cart} update={updateQuantity} coupon={coupon} setCoupon={setCoupon} apply={() => setCouponApplied(['FOODIE50', 'WELCOME'].includes(coupon.toUpperCase()))} applied={couponApplied} pricing={pricing} checkout={() => go('checkout')} />}
     {view === 'checkout' && <Checkout user={user} placeOrder={placeOrder} pricing={pricing} />}
     {view === 'orders' && <Orders orders={orders} signIn={() => setAuthOpen(true)} />}
