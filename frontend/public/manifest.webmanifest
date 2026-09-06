@@ -1,0 +1,10 @@
+{
+  "name": "Morsel Food Delivery",
+  "short_name": "Morsel",
+  "description": "Thoughtful food, delivered with care.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f7f4ed",
+  "theme_color": "#345846",
+  "icons": []
+}
