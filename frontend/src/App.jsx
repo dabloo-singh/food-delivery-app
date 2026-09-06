@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import './App.css'
 
-const API = (import.meta.env.VITE_API_URL || import.meta.env.VITE_API_BASE_URL || '').replace(/\/+$/, '').replace(/\/api$/, '')
+const configuredApi = import.meta.env.VITE_API_URL || import.meta.env.VITE_API_BASE_URL || ''
+const API = configuredApi.replace(/\/+$/, '').replace(/\/api$/, '')
 const restaurantsSeed = [
   { id: 'spice-garden', name: 'Spice Garden', cuisine: ['North Indian', 'Biryani'], rating: 4.8, deliveryTime: '25-30 min', image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=1000&q=85', description: 'Comforting Indian classics, slow-cooked and served warm.' },
   { id: 'pizza-hub', name: 'Pizza Hub', cuisine: ['Pizza', 'Italian'], rating: 4.6, deliveryTime: '20-25 min', image: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=1000&q=85', description: 'Wood-fired pizza, handmade pasta and Italian favourites.' },
@@ -17,7 +18,12 @@ const idOf = (value) => value?._id || value?.id
 const money = (value) => `₹${Math.round(Number(value) || 0)}`
 async function api(path, options = {}) {
   const token = localStorage.getItem('morsel-token')
-  const response = await fetch(`${API}/api${path}`, { ...options, headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}), ...(options.headers || {}) } })
+  let response
+  try {
+    response = await fetch(`${API}/api${path}`, { ...options, headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}), ...(options.headers || {}) } })
+  } catch {
+    throw new Error('Cannot connect to the backend. Start it with npm start and try again.')
+  }
   const data = await response.json().catch(() => ({}))
   if (!response.ok) throw new Error(data.message || 'Something went wrong')
   return data
