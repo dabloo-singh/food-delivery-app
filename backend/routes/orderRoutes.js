@@ -7,6 +7,7 @@ const { requireAdmin } = require('../middleware/adminMiddleware')
 
 const router = express.Router()
 const statuses = ['placed', 'confirmed', 'preparing', 'out-for-delivery', 'delivered']
+const coupons = { FOODIE50: { type: 'percentage', value: 50, maxDiscount: 150 }, WELCOME: { type: 'percentage', value: 20, maxDiscount: 100 } }
 const validate = (req, res, next) => { const errors = validationResult(req); if (!errors.isEmpty()) return res.status(400).json({ message: 'Validation failed', errors: errors.array() }); next() }
 
 router.post('/orders', requireAuth, [body('items').isArray({ min: 1 }), body('deliveryAddress').isObject(), body('paymentMethod').isIn(['razorpay', 'stripe', 'cash'])], validate, async (req, res, next) => {
@@ -15,8 +16,16 @@ router.post('/orders', requireAuth, [body('items').isArray({ min: 1 }), body('de
     const foods = await Food.find({ _id: { $in: requested.map((item) => item.foodId) }, isAvailable: true })
     if (foods.length !== requested.length) return res.status(400).json({ message: 'One or more food items are unavailable' })
     const items = requested.map((item) => { const food = foods.find((entry) => entry._id.toString() === item.foodId); return { foodId: food._id, name: food.name, price: food.price, quantity: Math.max(1, Number(item.quantity) || 1) } })
-    const totalAmount = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
-    const order = await Order.create({ userId: req.user._id, items, totalAmount, deliveryAddress: req.body.deliveryAddress, paymentMethod: req.body.paymentMethod, statusHistory: [{ status: 'placed' }] })
+    const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
+    const couponCode = String(req.body.couponCode || '').trim().toUpperCase()
+    const coupon = couponCode ? coupons[couponCode] : null
+    if (couponCode && !coupon) return res.status(400).json({ message: 'Invalid or expired coupon' })
+    const discount = coupon ? Math.min(Math.round(subtotal * coupon.value / 100), coupon.maxDiscount) : 0
+    const deliveryFee = subtotal >= 499 ? 0 : 40
+    const platformFee = subtotal ? 8 : 0
+    const tax = Math.round((subtotal - discount) * 0.05)
+    const totalAmount = subtotal + deliveryFee + platformFee + tax - discount
+    const order = await Order.create({ userId: req.user._id, items, totalAmount, pricing: { subtotal, deliveryFee, platformFee, tax, discount, couponCode: couponCode || undefined }, deliveryAddress: req.body.deliveryAddress, phone: req.body.phone || req.user.phone, notes: req.body.notes, paymentMethod: req.body.paymentMethod, statusHistory: [{ status: 'placed' }] })
     res.status(201).json(order)
   } catch (error) { next(error) }
 })
