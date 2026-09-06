@@ -21,8 +21,13 @@ const foodImages = {
   'paneer butter masala': 'https://images.unsplash.com/photo-1631452180519-c014fe946bc7?auto=format&fit=crop&w=800&q=85',
   'margherita pizza': 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=800&q=85',
   'veg hakka noodles': 'https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?auto=format&fit=crop&w=800&q=85',
+  'classic burger': 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=85',
+  'spicy noodles': 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=800&q=85',
+  'chicken biryani': 'https://images.unsplash.com/photo-1633945274405-b6c8069047b0?auto=format&fit=crop&w=800&q=85',
+  'chocolate cake': 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=85',
+  'green salad bowl': 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=85',
 }
-const imageForFood = (food) => food.image || foodImages[String(food.name || '').trim().toLowerCase()] || fallbackImage
+const imageForFood = (food) => (/^https?:\/\//i.test(food.image || '') ? food.image : foodImages[String(food.name || '').trim().toLowerCase()]) || fallbackImage
 const fallbackImage = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500"%3E%3Crect width="800" height="500" fill="%23345846"/%3E%3Ccircle cx="400" cy="225" r="92" fill="%23d7ed72"/%3E%3Cpath d="M350 225h100M400 175v100" stroke="%23345846" stroke-width="18" stroke-linecap="round"/%3E%3Ctext x="400" y="390" text-anchor="middle" fill="white" font-family="sans-serif" font-size="30"%3EMorsel%3C/text%3E%3C/svg%3E'
 const handleImageError = (event) => { event.currentTarget.onerror = null; event.currentTarget.src = fallbackImage }
 async function api(path, options = {}) {
