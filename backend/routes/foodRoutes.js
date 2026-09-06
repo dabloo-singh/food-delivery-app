@@ -62,6 +62,14 @@ const sampleFoods = [
     image: '🥗',
   },
 ]
+const catalogFoods = [
+  ['Signature Starter', 'Starters', 179], ['House Special', 'Recommended', 299], ['Classic Comfort Bowl', 'Mains', 269],
+  ['Garden Fresh Salad', 'Healthy', 229], ['Spiced Rice Plate', 'Rice', 319], ['Charcoal Grill Platter', 'Grills', 399],
+  ['Crispy Golden Fries', 'Sides', 149], ['Handmade Dumplings', 'Momos', 219], ['Creamy Pasta', 'Italian', 329],
+  ['Wood Fired Flatbread', 'Breads', 289], ['Fresh Fruit Cooler', 'Drinks', 129], ['Mango Lassi', 'Drinks', 139],
+  ['Warm Chocolate Cake', 'Desserts', 199], ['Berry Cheesecake', 'Desserts', 249], ['House Chai', 'Drinks', 99],
+].map(([name, category, price]) => ({ name, category, price, rating: 4.7, time: '25 min', description: 'Prepared fresh in the Morsel kitchen.', image: '🍽️' }))
+const fullCatalog = [...sampleFoods, ...catalogFoods]
 
 router.get('/foods', async (req, res) => {
   try {
@@ -71,14 +79,12 @@ router.get('/foods', async (req, res) => {
 
     const foods = await Food.find()
 
-    if (foods.length === 0) {
-      const createdFoods = await Food.insertMany(sampleFoods)
-      return res.status(200).json(createdFoods)
-    }
-
-    res.status(200).json(foods)
+    const existingNames = new Set(foods.map((food) => food.name))
+    const missingFoods = fullCatalog.filter((food) => !existingNames.has(food.name))
+    if (missingFoods.length) await Food.insertMany(missingFoods)
+    res.status(200).json(await Food.find())
   } catch (error) {
-    res.status(200).json(sampleFoods)
+    res.status(200).json(fullCatalog)
   }
 })
 
