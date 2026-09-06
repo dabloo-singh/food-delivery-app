@@ -12,6 +12,8 @@ const restaurantsSeed = [
   { id: 'burger-atelier', name: 'Burger Atelier', cuisine: ['Burgers', 'American'], rating: 4.7, deliveryTime: '20-25 min', image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=1000&q=85', description: 'Stacked burgers, golden fries and house-made sauces.' },
   { id: 'tokyo-table', name: 'Tokyo Table', cuisine: ['Japanese', 'Ramen'], rating: 4.8, deliveryTime: '25-30 min', image: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=1000&q=85', description: 'Comforting ramen, sushi rolls and Japanese small plates.' },
   { id: 'sweet-theory', name: 'Sweet Theory', cuisine: ['Desserts', 'Bakery'], rating: 4.5, deliveryTime: '10-15 min', image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=1000&q=85', description: 'Soft cakes, warm bakes and little moments of sweetness.' },
+  { id: 'coastal-curry', name: 'Coastal Curry', cuisine: ['South Indian', 'Seafood'], rating: 4.7, deliveryTime: '30-35 min', image: 'https://images.unsplash.com/photo-1601050690117-94f5f6fa8bd7?auto=format&fit=crop&w=1000&q=85', description: 'Coastal spices, coconut curries and fragrant rice plates.' },
+  { id: 'mezze-room', name: 'The Mezze Room', cuisine: ['Mediterranean', 'Middle Eastern'], rating: 4.6, deliveryTime: '25-30 min', image: 'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=1000&q=85', description: 'Fresh mezze, smoky grills and warm flatbreads to share.' },
 ]
 const foodsSeed = [
   { id: 'butter-chicken', name: 'Butter Chicken', category: 'North Indian', restaurant: 'Spice Garden', restaurantId: 'spice-garden', price: 349, rating: 4.8, description: 'Creamy tomato gravy with tender chicken.', image: 'https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?auto=format&fit=crop&w=800&q=85' },
@@ -54,6 +56,24 @@ const restaurantMenus = {
     { id: 'sweet-cheesecake', name: 'Berry Cheesecake', category: 'Desserts', restaurant: 'Sweet Theory', price: 249, rating: 4.7, description: 'Creamy cheesecake with bright berry compote.', image: 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=800&q=85' },
   ],
 }
+const completeMenuTemplates = [
+  ['Signature Starter', 'Starters', 179, 'A generous plate of house-seasoned bites.', 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=85'],
+  ['House Special', 'Recommended', 299, 'The dish everyone comes back for.', 'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=800&q=85'],
+  ['Classic Comfort Bowl', 'Mains', 269, 'Warm, satisfying and full of flavour.', 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=85'],
+  ['Garden Fresh Salad', 'Healthy', 229, 'Crisp greens with a bright house dressing.', 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=85'],
+  ['Spiced Rice Plate', 'Rice', 319, 'Fragrant rice layered with aromatic spices.', 'https://images.unsplash.com/photo-1633945274405-b6c8069047b0?auto=format&fit=crop&w=800&q=85'],
+  ['Charcoal Grill Platter', 'Grills', 399, 'Smoky grilled favourites served hot.', 'https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?auto=format&fit=crop&w=800&q=85'],
+  ['Crispy Golden Fries', 'Sides', 149, 'Golden, crisp and perfect for sharing.', 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=800&q=85'],
+  ['Handmade Dumplings', 'Momos', 219, 'Delicate parcels with a savoury dipping sauce.', 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=800&q=85'],
+  ['Creamy Pasta', 'Italian', 329, 'Silky sauce, herbs and freshly grated cheese.', 'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=800&q=85'],
+  ['Wood Fired Flatbread', 'Breads', 289, 'Hand-stretched, baked and finished with herbs.', 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=800&q=85'],
+  ['Fresh Fruit Cooler', 'Drinks', 129, 'Chilled seasonal fruit with a refreshing finish.', 'https://images.unsplash.com/photo-1502741224143-90386d7f8c82?auto=format&fit=crop&w=800&q=85'],
+  ['Mango Lassi', 'Drinks', 139, 'Creamy mango yoghurt drink with cardamom.', 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=85'],
+  ['Warm Chocolate Cake', 'Desserts', 199, 'Soft chocolate cake with a rich centre.', 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=85'],
+  ['Berry Cheesecake', 'Desserts', 249, 'Creamy cheesecake with bright berry compote.', 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=800&q=85'],
+  ['House Chai', 'Drinks', 99, 'Fragrant tea brewed with warming spices.', 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=800&q=85'],
+]
+const completeRestaurantMenus = Object.fromEntries(restaurantsSeed.map((restaurant) => [restaurant.id, completeMenuTemplates.map(([name, category, price, description, image], index) => ({ id: `${restaurant.id}-menu-${index}`, name, category, price, rating: 4.5 + (index % 5) / 10, description, image, restaurant: restaurant.name, restaurantId: restaurant.id }))]))
 const categoryIcons = { All: '✦', Pizza: '🍕', Burgers: '🍔', Chicken: '🍗', Chinese: '🍜', Momos: '🥟', Biryani: '🍛', Healthy: '🥗', Desserts: '🍰' }
 const idOf = (value) => value?._id || value?.id
 const money = (value) => `₹${Math.round(Number(value) || 0)}`
@@ -134,7 +154,7 @@ export default function App() {
     {notice && <div className="toast">{notice}</div>}
     {view === 'home' && <Home onRestaurants={() => go('restaurants')} restaurants={restaurants} foods={foods} openRestaurant={openRestaurant} addToCart={addToCart} cuisines={cuisines} setCuisine={setCuisine} setSearch={runSearch} recentSearches={recentSearches} favorites={favorites} toggleFavorite={toggleFavorite} />}
     {view === 'restaurants' && <main className="content"><Heading eyebrow="DISCOVER" title="Restaurants near you" text={`${visibleRestaurants.length} places serving your favourites`} /><div className="filters"><select value={sort} onChange={(event) => setSort(event.target.value)}><option value="rating">Top rated</option><option value="delivery">Fastest delivery</option></select>{cuisines.map((item) => <button className={cuisine === item ? 'active' : ''} key={item} onClick={() => setCuisine(item)}>{item}</button>)}</div>{!search && recentSearches.length > 0 && <div className="search-history"><b>Recent searches</b>{recentSearches.map((item) => <button key={item} onClick={() => runSearch(item)}>{item}</button>)}</div>}<div className="restaurant-grid">{visibleRestaurants.map((item) => <RestaurantCard key={idOf(item)} item={item} open={openRestaurant} favorite={favorites.includes(idOf(item))} toggleFavorite={toggleFavorite} />)}</div></main>}
-    {view === 'restaurant' && activeRestaurant && <RestaurantDetail item={activeRestaurant} foods={[...foods.filter((food) => String(food.restaurantId) === String(idOf(activeRestaurant)) || food.restaurant === activeRestaurant.name), ...(restaurantMenus[idOf(activeRestaurant)] || [])].filter((food, index, list) => list.findIndex((entry) => idOf(entry) === idOf(food)) === index)} addToCart={addToCart} back={() => go('restaurants')} />}
+    {view === 'restaurant' && activeRestaurant && <RestaurantDetail item={activeRestaurant} foods={completeRestaurantMenus[idOf(activeRestaurant)] || restaurantMenus[idOf(activeRestaurant)] || []} addToCart={addToCart} back={() => go('restaurants')} />}
     {view === 'cart' && <Cart cart={cart} update={updateQuantity} coupon={coupon} setCoupon={setCoupon} apply={() => setCouponApplied(['FOODIE50', 'WELCOME'].includes(coupon.toUpperCase()))} applied={couponApplied} pricing={pricing} checkout={() => go('checkout')} />}
     {view === 'checkout' && <Checkout user={user} placeOrder={placeOrder} pricing={pricing} />}
     {view === 'orders' && <Orders orders={orders} signIn={() => setAuthOpen(true)} />}
