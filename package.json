@@ -1,0 +1,12 @@
+{
+  "name": "food-delivery-app",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "npm --prefix backend start",
+    "backend": "npm --prefix backend start",
+    "frontend": "npm --prefix frontend run dev",
+    "dev": "npm run frontend",
+    "build": "npm --prefix frontend run build"
+  }
+}

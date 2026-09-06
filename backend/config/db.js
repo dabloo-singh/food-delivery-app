@@ -10,7 +10,7 @@ const connectDB = async () => {
     console.log('MongoDB connected successfully')
   } catch (error) {
     console.error('MongoDB connection failed:', error.message)
-    console.log('Starting server without database connection. Set MONGO_URI to connect later.')
+    throw error
   }
 }
 
